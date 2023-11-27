@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">ArtSpaceGoogleCourse</string>
+
+    <string name="art_name_1">Pink Clouds</string>
+    <string name="art_name_2">Forbidden Forest</string>
+    <string name="art_name_3">Bermuda Island</string>
+
+    <string name="artist_name_1">Xavier Gonzalez</string>
+    <string name="artist_name_2">Gavi</string>
+    <string name="artist_name_3">Lamine Yamal</string>
+
+    <string name="art_description_1">Lorem ipsum dolor sit amet, consectetur adipiscing elit</string>
+    <string name="art_description_2">Excepteur sint occaecat cupidatat non proident</string>
+    <string name="art_description_3">At vero eos et accusamus et iusto odio dignissimos</string>
+</resources>
