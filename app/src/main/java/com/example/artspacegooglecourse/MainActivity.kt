@@ -108,8 +108,8 @@ fun ArtworkScreen(
 
         Box(
             modifier = modifier
-                .height(375.dp)
-                .width(250.dp)
+                .height(400.dp)
+                .width(300.dp)
         ) {
             ArtImage((art[current]).imageResourceID)
         }
@@ -129,7 +129,8 @@ fun ArtworkScreen(
             ArtworkDescriptor(
                 (art[current]).name,
                 (art[current]).artist,
-                (art[current]).description
+                (art[current]).year,
+                (art[current]).description,
             )
     }
 }
@@ -151,6 +152,7 @@ fun ArtImage(
 fun ArtworkDescriptor (
     @StringRes artTitle: Int,
     @StringRes artistName: Int,
+    @StringRes artistYear: Int,
     @StringRes artDescription: Int,
     modifier: Modifier = Modifier
 ) {
@@ -166,10 +168,18 @@ fun ArtworkDescriptor (
             stringResource(artTitle),
             style = MaterialTheme.typography.displayLarge
         )
-        Text(
-            stringResource(artistName),
-            style = MaterialTheme.typography.displayMedium
+        Row (
+            horizontalArrangement = Arrangement.spacedBy(8.dp)
+        ){
+            Text(
+                stringResource(artistName),
+                style = MaterialTheme.typography.displayMedium
             )
+            Text(
+               text = "(${stringResource(artistYear)})" ,
+                style = MaterialTheme.typography.displayMedium
+            )
+        }
         Text(
             stringResource(artDescription),
             textAlign = TextAlign.Center,
