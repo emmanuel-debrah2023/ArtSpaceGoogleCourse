@@ -16,8 +16,4 @@
     <string name="art_description_1">Lorem ipsum dolor sit amet, consectetur adipiscing elit</string>
     <string name="art_description_2">Excepteur sint occaecat cupidatat non proident</string>
     <string name="art_description_3">At vero eos et accusamus et iusto odio dignissimos</string>
-
-    <string name="gallery_button_text">Gallery</string>
-
-    <string name="title_activity_gallery">GalleryActivity</string>
 </resources>
