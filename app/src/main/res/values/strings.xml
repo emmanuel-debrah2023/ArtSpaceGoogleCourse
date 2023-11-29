@@ -18,6 +18,7 @@
     <string name="art_description_3">At vero eos et accusamus et iusto odio dignissimos</string>
 
     <string name="gallery_button_text">Gallery</string>
+    <string name="gallery_screen_text"> Welcome to the Gallery Screen</string>
 
     <string name="title_activity_gallery">GalleryActivity</string>
 </resources>
