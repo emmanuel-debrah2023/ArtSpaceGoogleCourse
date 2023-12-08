@@ -41,7 +41,13 @@ val Typography = Typography(
         fontFamily = Merriweather,
         fontWeight = FontWeight.Normal,
         fontSize = 36.sp
-    )
+    ),
+    titleSmall = TextStyle(
+        fontFamily = Merriweather,
+        fontWeight = FontWeight.Normal,
+        fontSize = 40.sp
+    ),
+
 
     /* Other default text styles to override
     titleLarge = TextStyle(

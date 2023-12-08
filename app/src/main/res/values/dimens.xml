@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <dimen name="x_small_value">8dp</dimen>
+    <dimen name="small_value">12dp</dimen>
+    <dimen name="medium_value">16dp</dimen>
+
+    <dimen name="button_space_between">100dp</dimen>
+    <dimen name="text_vertical_space">10dp</dimen>
+
+    <dimen name="logo_size">128dp</dimen>
+
+    <dimen name="image_height">400dp</dimen>
+    <dimen name="image_width">300dp</dimen>
+
+</resources>
