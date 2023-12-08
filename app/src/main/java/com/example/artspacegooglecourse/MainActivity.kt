@@ -15,13 +15,11 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.ArrowForward
 import androidx.compose.material.icons.filled.KeyboardArrowLeft
-import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -38,13 +36,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import com.example.artspacegooglecourse.components.ButtonWithIcon
+import com.example.artspacegooglecourse.components.NavTopBar
 import com.example.artspacegooglecourse.ui.theme.ArtSpaceGoogleCourseTheme
+import com.example.artspacegooglecourse.utils.findActivity
 import data.art
 
 class MainActivity : ComponentActivity() {
@@ -62,42 +62,23 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
+
 }
 @OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun ArtSpaceApp() {
-    Scaffold (topBar = {
-        ArtSpaceTopBar()
-    }
-    ){
+    Scaffold (
+        topBar = {
+            NavTopBar(iconBtn = {GalleryButton()})
+        }
+    )
+    {
         ArtworkScreen()
     }
 
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun ArtSpaceTopBar(modifier: Modifier = Modifier) {
-    CenterAlignedTopAppBar(
-        title = {
-            Row {
-                Image(
-                modifier = Modifier
-                    .size(128.dp)
-                    .padding(8.dp),
-                painter = painterResource(R.drawable.artspace_logo),
-                contentDescription = null
-                )
-
-            }
-                },
-        modifier = modifier,
-        navigationIcon = {
-            GalleryButton()
-        }
-    )
-}
 
 @Composable
 fun GalleryButton() {
@@ -113,29 +94,34 @@ fun GalleryButton() {
 }
 
 @Composable
-fun ArtworkScreen(
-    modifier: Modifier = Modifier,
-) {
-    var current by remember {
-        mutableStateOf(1)
+fun ArtworkScreen() {
+    val locContext = LocalContext.current
+    val activity = locContext.findActivity()
+    val intent = activity?.intent
+    val artState = intent?.getIntExtra("indexOfArt",2) ?: 2
+
+
+    var current: Int by remember {
+        mutableStateOf(artState)
     }
+
     Column (
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
 
     ){
 
-
+        println((art[current]).name)
         Box(
-            modifier = modifier
-                .height(400.dp)
-                .width(300.dp)
+            modifier = Modifier
+                .height(dimensionResource(id = R.dimen.image_height))
+                .width(dimensionResource(id = R.dimen.image_width))
         ) {
             ArtImage((art[current]).imageResourceID)
         }
 
             Row(
-                horizontalArrangement = Arrangement.spacedBy(100.dp)
+                horizontalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.button_space_between))
             ){
                 PreviousButton(
                     current,
@@ -174,13 +160,12 @@ fun ArtworkDescriptor (
     @StringRes artistName: Int,
     @StringRes artistYear: Int,
     @StringRes artDescription: Int,
-    modifier: Modifier = Modifier
 ) {
     Column (
-        modifier = modifier
-            .padding(horizontal = 12.dp),
+        modifier = Modifier
+            .padding(horizontal = dimensionResource(R.dimen.small_value)),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(10.dp)
+        verticalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.text_vertical_space))
 
     )
     {
@@ -189,7 +174,7 @@ fun ArtworkDescriptor (
             style = MaterialTheme.typography.displayLarge
         )
         Row (
-            horizontalArrangement = Arrangement.spacedBy(8.dp)
+            horizontalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.x_small_value))
         ){
             Text(
                 stringResource(artistName),
