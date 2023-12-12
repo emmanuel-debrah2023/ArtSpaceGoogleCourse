@@ -12,6 +12,7 @@ import com.example.artspacegooglecourse.MainActivity
 import com.example.artspacegooglecourse.R
 import data.Art
 
+const val EXTRA_NAME = "indexOfArt"
 @Composable
 fun GalleryGrid(
     artList: List<Art>
@@ -28,7 +29,7 @@ fun GalleryGrid(
                 artTitle = art.name,
                 clickEvent = {
                     val intent = Intent(locContext, MainActivity::class.java)
-                    intent.putExtra("indexOfArt", artList.indexOf(art))
+                    intent.putExtra(EXTRA_NAME, artList.indexOf(art))
                     locContext.startActivity(intent)
                 }
             )
