@@ -42,6 +42,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.artspacegooglecourse.components.ButtonWithIcon
+import com.example.artspacegooglecourse.components.EXTRA_NAME
 import com.example.artspacegooglecourse.components.NavTopBar
 import com.example.artspacegooglecourse.ui.theme.ArtSpaceGoogleCourseTheme
 import com.example.artspacegooglecourse.utils.findActivity
@@ -95,14 +96,10 @@ fun GalleryButton() {
 
 @Composable
 fun ArtworkScreen() {
-    val locContext = LocalContext.current
-    val activity = locContext.findActivity()
-    val intent = activity?.intent
-    val artState = intent?.getIntExtra("indexOfArt",2) ?: 2
-
+    val index = LocalContext.current.findActivity()?.intent?.getIntExtra(EXTRA_NAME,2) ?: 2
 
     var current: Int by remember {
-        mutableStateOf(artState)
+        mutableStateOf(index)
     }
 
     Column (
@@ -111,7 +108,6 @@ fun ArtworkScreen() {
 
     ){
 
-        println((art[current]).name)
         Box(
             modifier = Modifier
                 .height(dimensionResource(id = R.dimen.image_height))
