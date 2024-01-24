@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:tools="http://schemas.android.com/tools" package="com.example.artspacegooglecourse">
 
     <application
         android:allowBackup="true"
@@ -13,19 +13,13 @@
         android:theme="@style/Theme.ArtSpaceGoogleCourse"
         tools:targetApi="31">
         <activity
-            android:name=".GalleryActivity"
+            android:name=".MainActivity"
             android:exported="true"
-            android:label="@string/title_activity_gallery"
-            android:theme="@style/Theme.ArtSpaceGoogleCourse" >
+            android:theme="@style/Theme.ArtSpaceGoogleCourse">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
-        <activity
-            android:name=".MainActivity"
-            android:exported="true"
-            android:theme="@style/Theme.ArtSpaceGoogleCourse">
         </activity>
     </application>
 

@@ -1,36 +1,34 @@
 package com.example.artspacegooglecourse.components
 
-import android.content.Intent
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.dimensionResource
-import com.example.artspacegooglecourse.MainActivity
+import androidx.navigation.NavController
 import com.example.artspacegooglecourse.R
-import data.Art
+import com.example.artspacegooglecourse.data.Art
 
-const val EXTRA_NAME = "indexOfArt"
+
 @Composable
 fun GalleryGrid(
-    artList: List<Art>
+    artList: List<Art>,
+    navController: NavController
 ) {
-    val locContext = LocalContext.current
+
 
     LazyVerticalGrid(
         columns = GridCells.Fixed(2),
         contentPadding = PaddingValues(dimensionResource(R.dimen.small_value))
     ){
         items(artList){ art ->
+            val artIndex = artList.indexOf(art)
             GalleryItem(
                 artwork = art.imageResourceID ,
                 artTitle = art.name,
                 clickEvent = {
-                    val intent = Intent(locContext, MainActivity::class.java)
-                    intent.putExtra(EXTRA_NAME, artList.indexOf(art))
-                    locContext.startActivity(intent)
+                    navController.navigate("Art/${artIndex}")
                 }
             )
         }
