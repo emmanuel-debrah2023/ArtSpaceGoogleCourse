@@ -1,16 +1,9 @@
-package data
+package com.example.artspacegooglecourse.data
 
-import androidx.annotation.DrawableRes
-import androidx.annotation.StringRes
 import com.example.artspacegooglecourse.R
 
-data class Art(
-    @DrawableRes val imageResourceID: Int,
-    @StringRes val name: Int,
-    @StringRes val artist: Int,
-    @StringRes val year: Int,
-    @StringRes val description: Int,
-    )
+const val INDEX_INCREASE = 1
+const val INDEX_DECREASE = 1
 
 val art = listOf(
     Art(R.drawable.artwork_1,R.string.art_name_1,R.string.artist_name_1,R.string.year_1,R.string.art_description_1 ),

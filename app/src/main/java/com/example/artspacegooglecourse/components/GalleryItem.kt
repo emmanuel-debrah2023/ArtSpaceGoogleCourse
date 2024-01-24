@@ -1,3 +1,5 @@
+@file:Suppress("MoveLambdaOutsideParentheses")
+
 package com.example.artspacegooglecourse.components
 
 import androidx.annotation.DrawableRes
@@ -17,7 +19,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.artspacegooglecourse.R
-import data.art
+import com.example.artspacegooglecourse.data.art
 
 @Composable
 fun GalleryItem(
@@ -41,7 +43,7 @@ fun GalleryItem(
                 )
                 Text(
                     text = stringResource(artTitle),
-                    style = MaterialTheme.typography.titleSmall
+                    style = MaterialTheme.typography.displayMedium
                 )
             }
         }
