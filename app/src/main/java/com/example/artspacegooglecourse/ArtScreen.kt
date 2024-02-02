@@ -1,7 +1,6 @@
 package com.example.artspacegooglecourse
 
 import androidx.annotation.DrawableRes
-import androidx.annotation.StringRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -22,11 +21,14 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Devices
+import androidx.compose.ui.tooling.preview.Preview
 import com.example.artspacegooglecourse.components.GalleryButton
 import com.example.artspacegooglecourse.components.NavTopBar
 import com.example.artspacegooglecourse.components.NextButton
 import com.example.artspacegooglecourse.components.PreviousButton
 import com.example.artspacegooglecourse.data.art
+import com.example.artspacegooglecourse.ui.theme.ArtSpaceGoogleCourseTheme
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -35,7 +37,8 @@ fun ArtScreen(
     onNavigateToGallery: ()-> Unit,
     buttonClickLeft: (Int) -> Unit,
     buttonClickRight: (Int) -> Unit,
-    id: Int
+    id: Int,
+    modifier: Modifier = Modifier
 ) {
     Scaffold(
         topBar = {
@@ -48,11 +51,11 @@ fun ArtScreen(
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center,
-                modifier = Modifier.padding(paddingValues)
+                modifier = modifier.padding(paddingValues)
             ) {
 
                 Box(
-                    modifier = Modifier
+                    modifier = modifier
                         .height(dimensionResource(id = R.dimen.image_height))
                         .width(dimensionResource(id = R.dimen.image_width))
                 ) {
@@ -71,22 +74,20 @@ fun ArtScreen(
                         incrementState = { buttonClickRight(id) }
                     )
                 }
-                ArtworkDescriptor(
-                    (art[id]).name,
-                    (art[id]).artist,
-                    (art[id]).year,
-                    (art[id]).description,
+                ArtworkDetails(
+                    stringResource((art[id]).name),
+                    stringResource((art[id]).artist),
+                    stringResource((art[id]).year),
+                    stringResource((art[id]).description),
                 )
-                println(id)
             }
         }
     }
 
 @Composable
 fun ArtImage(
-    @DrawableRes artImage: Int,
+    @DrawableRes artImage: Int
 ) {
-    //Add modifier styling with dimensions
     Image(
         painter = painterResource(artImage),
         contentDescription = null,
@@ -96,14 +97,15 @@ fun ArtImage(
 
 
 @Composable
-fun ArtworkDescriptor (
-    @StringRes artTitle: Int,
-    @StringRes artistName: Int,
-    @StringRes artistYear: Int,
-    @StringRes artDescription: Int,
+fun ArtworkDetails (
+    artTitle: String,
+    artistName: String,
+    artistYear: String,
+    artDescription: String,
+    modifier: Modifier = Modifier
 ) {
     Column(
-        modifier = Modifier
+        modifier = modifier
             .padding(horizontal = dimensionResource(R.dimen.small_value)),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.text_vertical_space))
@@ -111,26 +113,34 @@ fun ArtworkDescriptor (
     )
     {
         Text(
-            stringResource(artTitle),
+            artTitle,
             style = MaterialTheme.typography.displayLarge
         )
         Row(
             horizontalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.x_small_value))
         ) {
             Text(
-                stringResource(artistName),
+                artistName,
                 style = MaterialTheme.typography.displayMedium
             )
             Text(
-                text = "(${stringResource(artistYear)})",
+                text = artistYear,
                 style = MaterialTheme.typography.displayMedium
             )
         }
         Text(
-            stringResource(artDescription),
+            artDescription,
             textAlign = TextAlign.Center,
             style = MaterialTheme.typography.bodyLarge
         )
+    }
+}
+
+@Preview(showBackground = true, device = Devices.PIXEL_3A)
+@Composable
+fun ArtScreenPreview(){
+    ArtSpaceGoogleCourseTheme{
+        ArtScreen(onNavigateToGallery = {}, buttonClickLeft = {}, buttonClickRight ={} , id = 0)
     }
 }
 

@@ -18,6 +18,7 @@ import com.example.artspacegooglecourse.components.TopBar
 import com.example.artspacegooglecourse.data.INDEX_DECREASE
 import com.example.artspacegooglecourse.data.INDEX_INCREASE
 import com.example.artspacegooglecourse.data.art
+import com.example.artspacegooglecourse.ui.theme.ArtSpaceGoogleCourseTheme
 
 @Composable
 fun GalleryApp(
@@ -53,14 +54,16 @@ fun GalleryApp(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun GalleryScreen(
-        navController: NavHostController
+        navController: NavHostController,
+        modifier: Modifier = Modifier
+
 ) {
 
     Scaffold (
         topBar = { TopBar() }
     ){ innerPadding ->
         Box(
-            modifier = Modifier
+            modifier = modifier
                 .padding(innerPadding)
         ) {
             GalleryGrid(
@@ -73,6 +76,8 @@ fun GalleryScreen(
 
 @Preview(showBackground = true)
 @Composable
-fun Preview() {
-
+fun GalleryScreenPreview() {
+    ArtSpaceGoogleCourseTheme {
+        GalleryScreen(navController = rememberNavController())
+    }
 }

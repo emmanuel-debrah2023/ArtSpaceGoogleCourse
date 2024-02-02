@@ -13,8 +13,9 @@ import com.example.artspacegooglecourse.data.art
 
 @Composable
 fun NextButton(currentState: Int, incrementState: (Int) -> Unit) {
-    IconButton(onClick ={
-        incrementState(currentState + 1)
+    IconButton(
+        onClick = {
+        incrementState(currentState)
     },
         enabled = (currentState != art.size-1)
     ) {
@@ -25,7 +26,7 @@ fun NextButton(currentState: Int, incrementState: (Int) -> Unit) {
 @Composable
 fun PreviousButton(currentState: Int, decrementState: (Int) -> Unit) {
     IconButton(onClick = {
-        decrementState(currentState - 1)
+        decrementState(currentState)
     },
         enabled = (currentState != 0)) {
         Icon(Icons.Filled.ArrowBack, contentDescription = "" )
