@@ -8,12 +8,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.dimensionResource
 import androidx.navigation.NavController
 import com.example.artspacegooglecourse.R
-import com.example.artspacegooglecourse.data.Art
+import com.example.artspacegooglecourse.data.ArtModel
 
 
 @Composable
 fun GalleryGrid(
-    artList: List<Art>,
+    artList: List<ArtModel>,
     navController: NavController
 ) {
 
