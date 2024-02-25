@@ -5,6 +5,6 @@ import com.example.artspacegooglecourse.data.ImageApiModel
 import retrofit2.http.GET
 
 interface ArtworkApiService {
-    @GET("artworks?limit=5")
+    @GET("artworks?limit=10")
     suspend fun getPhotos(): ImageApiModel
 }

@@ -14,7 +14,6 @@ class NetworkArtworkRepository(
 
     override suspend fun getArtworkPhotosData(): List<ImageData> {
         val photos: ImageApiModel = artworkApiService.getPhotos()
-        val data = photos.data
-        return data
+        return photos.data
     }
 }
