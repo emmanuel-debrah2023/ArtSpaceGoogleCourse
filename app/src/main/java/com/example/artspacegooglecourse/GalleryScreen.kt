@@ -7,6 +7,8 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.lifecycle.viewmodel.viewModelFactory
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -27,11 +29,13 @@ fun GalleryApp(
     NavHost(navController = navController,
         startDestination = Screen.Gallery.name
     ) {
+
         composable(Screen.Gallery.name){
-            GalleryScreen(
-                navController = navController
-            )
-        }
+            val artworkViewModel: ArtworkViewModel = viewModel(factory = ArtworkViewModel.Factory)
+            ArtworkScreen(
+                artworkUiState = artworkViewModel.artworkUiState,
+                retryAction = artworkViewModel::getArtworkPhotosData
+                )   }
 
         composable(
             route="${Screen.Art.name}/{id}",

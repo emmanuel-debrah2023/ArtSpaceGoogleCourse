@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.kotlin.serialization)
 }
 
 android {
@@ -65,6 +66,12 @@ dependencies {
     implementation(libs.androidx.navigation.ui.ktx)
     implementation(libs.androidx.navigation.dynamic)
     implementation(libs.androidx.navigation.compose)
+    implementation(libs.retrofit2)
+    implementation(libs.retrofit.converter.serialization)
+    implementation(libs.http3)
+    implementation(libs.json)
+    implementation(libs.logging.interceptor)
+    implementation(libs.coil)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.navigation.testing)
     androidTestImplementation(libs.androidx.test.ext)
