@@ -11,10 +11,20 @@
 "junit" = "4.13.2"
 "androidxTestExt" = "1.1.5"
 "androidTestEspresso" ="3.5.1"
+"http3" = "4.11.0"
+"retrofitSerializationConverter" = "1.0.0"
+"retrofit2" = "2.9.0"
+"kotlinxJson" = "1.6.0"
+"kotlinSerialization" = "1.8.10"
+"coil" = "2.4.0"
+"logging-interceptor" = "4.12.0"
+
+
 
 [plugins]
 android-application = {id = "com.android.application", version.ref = "androidGradlePlugin"}
 kotlin-android = {id = "org.jetbrains.kotlin.android", version.ref = "kotlinGradlePlugin"}
+kotlin-serialization = {id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlinSerialization"}
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "androidxCore"}
@@ -41,3 +51,11 @@ androidx-compose-ui-test = { group = "androidx.compose.ui", name = "ui-test-juni
 #Debug
 androidx-compose-ui-tooling = {group = "androidx.compose.ui", name = "ui-tooling"}
 androidx-compose-ui-test-manifest = {group = "androidx.compose.ui", name = "ui-test-manifest"}
+#Retrofit
+retrofit2 = {group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit2"}
+http3 = {group = "com.squareup.okhttp3", name = "okhttp", version.ref = "http3"}
+retrofit-converter-serialization = {group = "com.jakewharton.retrofit", name = "retrofit2-kotlinx-serialization-converter", version.ref = "retrofitSerializationConverter"}
+json = {group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlinxJson"}
+logging-interceptor = {group = "com.squareup.okhttp3", name = "logging-interceptor", version.ref = "logging-interceptor"}
+#Coil
+coil = {group = "io.coil-kt", name = "coil-compose", version.ref = "coil"}

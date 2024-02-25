@@ -17,6 +17,10 @@
     <string name="art_description_2">Excepteur sint occaecat cupidatat non proident</string>
     <string name="art_description_3">At vero eos et accusamus et iusto odio dignissimos</string>
 
+    <string name="loading_failed"> Loading this resource has failed please try again</string>
+    <string name="retry"> Retry </string>
+    <string name="loading">Loading</string>
+
     <string name="gallery_button_text">Gallery</string>
 
 </resources>
