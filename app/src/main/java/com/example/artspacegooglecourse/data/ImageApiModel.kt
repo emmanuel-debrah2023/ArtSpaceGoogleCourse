@@ -34,8 +34,8 @@ data class ImageData(
     @SerialName(value = "is_boosted")
     val isBoosted: Boolean,
     val title: String,
-    @SerialName(value = "alt_titles")
-    val altTitles: String?,
+    //@SerialName(value = "alt_titles")
+    //val altTitles: String?,
     @SerialName("image_id")
     val imageId: String = ""
 )

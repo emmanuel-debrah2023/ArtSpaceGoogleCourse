@@ -34,8 +34,10 @@ fun GalleryApp(
             val artworkViewModel: ArtworkViewModel = viewModel(factory = ArtworkViewModel.Factory)
             ArtworkScreen(
                 artworkUiState = artworkViewModel.artworkUiState,
-                retryAction = artworkViewModel::getArtworkPhotosData
-                )   }
+                retryAction = artworkViewModel::getArtworkPhotosData,
+                onArtSelect = {artworkViewModel.getArtInfo(it)}
+            )
+        }
 
         composable(
             route="${Screen.Art.name}/{id}",

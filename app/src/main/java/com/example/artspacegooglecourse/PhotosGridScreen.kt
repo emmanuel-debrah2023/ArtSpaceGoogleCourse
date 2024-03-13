@@ -1,6 +1,7 @@
 package com.example.artspacegooglecourse
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -40,16 +41,18 @@ fun ArtworkScreen(
     artworkUiState: ArtworkUiState,
     modifier: Modifier = Modifier,
     retryAction: () -> Unit,
-    contentPadding: PaddingValues = PaddingValues(0.dp)
-){
-    println("Loading")
-    when(artworkUiState) {
+    contentPadding: PaddingValues = PaddingValues(0.dp),
+    onArtSelect: (ImageData) -> Unit
+) {
+    when (artworkUiState) {
         is ArtworkUiState.Loading -> PhotosLoadingScreen(modifier = modifier.fillMaxSize())
         is ArtworkUiState.Success -> PhotosGridScreen(
-            artworkUiState.photos,
+            imageData = artworkUiState.photos,
             contentPadding = contentPadding,
+            onArtSelect = {onArtSelect(it)},
             modifier = modifier
-            )
+        )
+
         is ArtworkUiState.Error -> PhotosErrorScreen(retryAction)
     }
 }
@@ -57,10 +60,11 @@ fun ArtworkScreen(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PhotosGridScreen(
-    photos: List<ImageData>,
+    imageData: List<ImageData>,
     modifier: Modifier = Modifier,
-    contentPadding: PaddingValues = PaddingValues(0.dp)
-    ) {
+    contentPadding: PaddingValues = PaddingValues(0.dp),
+    onArtSelect: (ImageData) -> Unit
+) {
     Scaffold(
         topBar = { TopBar() }
     ) {
@@ -69,10 +73,13 @@ fun PhotosGridScreen(
             modifier = modifier.padding(horizontal = 16.dp),
             contentPadding = it,
 
-            ){
-            items(items = photos, key = {photo -> photo.id}) { photo ->
+            ) {
+            items(items = imageData, key = { photo -> photo.id }) { photo ->
                 ArtPhotoCard(
-                    photo,
+                    photo = photo,
+                    onClick = { image ->
+                        onArtSelect(image)
+                    },
                     modifier = modifier
                 )
 
@@ -81,23 +88,22 @@ fun PhotosGridScreen(
     }
 
 
-
-
 }
 
 @Composable
 fun ArtPhotoCard(
     photo: ImageData,
+    onClick: (ImageData) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Card(
         modifier = modifier
+            .clickable { onClick(photo) }
             .height(244.dp)
-            .padding(4.dp)
-        ,
+            .padding(4.dp),
         shape = MaterialTheme.shapes.medium,
         elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
-    ){
+    ) {
         AsyncImage(
             model = ImageRequest.Builder(context = LocalContext.current)
                 .data(
@@ -122,7 +128,7 @@ fun PhotosLoadingScreen(modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun PhotosErrorScreen(retryAction: () -> Unit,modifier: Modifier = Modifier) {
+fun PhotosErrorScreen(retryAction: () -> Unit, modifier: Modifier = Modifier) {
     Column(
         modifier = modifier,
         verticalArrangement = Arrangement.Center,
@@ -139,7 +145,6 @@ fun PhotosErrorScreen(retryAction: () -> Unit,modifier: Modifier = Modifier) {
 }
 
 
-
 @Preview
 @Composable
 fun ArtworkScreenPreview() {
@@ -151,13 +156,14 @@ fun ArtworkScreenPreview() {
                 apiLink = "Google.com/",
                 isBoosted = false,
                 title = "MonaLisa",
-                altTitles = null,
+                //altTitles = null,
                 imageId = "id-here"
             )
         }
         ArtworkScreen(
             ArtworkUiState.Success(mockData),
-            retryAction = {}
+            retryAction = {},
+            onArtSelect = {}
         )
     }
 }
@@ -173,10 +179,10 @@ fun PhotoGridScreenPreview() {
                 apiLink = "Google.com/",
                 isBoosted = false,
                 title = "MonaLisa",
-                altTitles = null,
+                //altTitles = null,
                 imageId = "image-id-2"
-                )
+            )
         }
-        PhotosGridScreen(mockData)
+        PhotosGridScreen(imageData = mockData, onArtSelect = {})
     }
 }

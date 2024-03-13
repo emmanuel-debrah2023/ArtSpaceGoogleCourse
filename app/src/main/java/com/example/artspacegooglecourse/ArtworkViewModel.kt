@@ -53,6 +53,10 @@ class ArtworkViewModel(private val artworkRepository: ArtworkRepository) : ViewM
         }
     }
 
+    fun getArtInfo(it: ImageData) {
+        println(it.id)
+    }
+
     /**
      * Factory for [MarsViewModel] that takes [MarsPhotosRepository] as a dependency
      */
