@@ -63,7 +63,7 @@ fun PhotosGridScreen(
     imageData: List<ImageData>,
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(0.dp),
-    onArtSelect: (ImageData) -> Unit
+    onArtSelect: (ImageData) -> Unit,
 ) {
     Scaffold(
         topBar = { TopBar() }
@@ -71,8 +71,7 @@ fun PhotosGridScreen(
         LazyVerticalGrid(
             columns = GridCells.Adaptive(150.dp),
             modifier = modifier.padding(horizontal = 16.dp),
-            contentPadding = it,
-
+            contentPadding = it
             ) {
             items(items = imageData, key = { photo -> photo.id }) { photo ->
                 ArtPhotoCard(
@@ -98,7 +97,9 @@ fun ArtPhotoCard(
 ) {
     Card(
         modifier = modifier
-            .clickable { onClick(photo) }
+            .clickable {
+                onClick(photo)
+            }
             .height(244.dp)
             .padding(4.dp),
         shape = MaterialTheme.shapes.medium,
@@ -163,7 +164,7 @@ fun ArtworkScreenPreview() {
         ArtworkScreen(
             ArtworkUiState.Success(mockData),
             retryAction = {},
-            onArtSelect = {}
+            onArtSelect = {},
         )
     }
 }

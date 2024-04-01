@@ -7,6 +7,7 @@ import retrofit2.Retrofit
 import kotlinx.serialization.json.Json
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
+import retrofit2.create
 import java.util.concurrent.TimeUnit
 
 
@@ -16,6 +17,7 @@ interface AppContainer {
 
 class DefaultAppContainer : AppContainer {
     private val baseUrl = "https://api.artic.edu/api/v1/"
+    private val baseUrl2 =  "https://www.artic.edu/iiif/2/"
 
     val intercepter = HttpLoggingInterceptor().apply {
         this.level = HttpLoggingInterceptor.Level.BODY
@@ -34,7 +36,18 @@ class DefaultAppContainer : AppContainer {
         .client(client.build())
         .build()
 
+    private val retrofit2: Retrofit = Retrofit.Builder()
+        .addConverterFactory(Json{ignoreUnknownKeys = true; coerceInputValues = true}.asConverterFactory("application/json".toMediaType()))
+        .baseUrl(baseUrl2)
+        .client(client.build())
+        .build()
+
+
     private val retrofitService: ArtworkApiService by lazy {
+        retrofit.create(ArtworkApiService::class.java)
+    }
+
+    private val retrofitService2: ArtworkApiService by lazy {
         retrofit.create(ArtworkApiService::class.java)
     }
 

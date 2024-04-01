@@ -5,6 +5,8 @@ interface ArtworkRepository {
     suspend fun getArtworkPhotos() : ImageApiModel
 
     suspend fun getArtworkPhotosData(): List<ImageData>
+
+    suspend fun getSpecificArtworkData(id: String): ImageData
 }
 
 class NetworkArtworkRepository(
@@ -15,5 +17,11 @@ class NetworkArtworkRepository(
     override suspend fun getArtworkPhotosData(): List<ImageData> {
         val photos: ImageApiModel = artworkApiService.getPhotos()
         return photos.data
+    }
+
+    override suspend fun getSpecificArtworkData(id: String): ImageData {
+        val photo = artworkApiService.getPhotoData(id)
+        println("The id is : $id")
+        return photo.data[0]
     }
 }

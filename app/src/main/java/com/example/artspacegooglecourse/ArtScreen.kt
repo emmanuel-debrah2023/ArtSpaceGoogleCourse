@@ -6,8 +6,10 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
@@ -17,28 +19,48 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import coil.compose.AsyncImage
+import coil.request.ImageRequest
 import com.example.artspacegooglecourse.components.GalleryButton
 import com.example.artspacegooglecourse.components.NavTopBar
-import com.example.artspacegooglecourse.components.NextButton
-import com.example.artspacegooglecourse.components.PreviousButton
-import com.example.artspacegooglecourse.data.art
+import com.example.artspacegooglecourse.data.ImageData
 import com.example.artspacegooglecourse.ui.theme.ArtSpaceGoogleCourseTheme
+import com.example.artspacegooglecourse.utils.linkBuilder
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ArtScreen(
-    onNavigateToGallery: ()-> Unit,
-    buttonClickLeft: (Int) -> Unit,
-    buttonClickRight: (Int) -> Unit,
-    id: Int,
-    modifier: Modifier = Modifier
+    artScreenUiState: ArtScreenUiState,
+    onNavigateToGallery: () -> Unit,
+    id: String?
+) {
+    when(artScreenUiState){
+        is ArtScreenUiState.Loading -> ArtworkApiLoadingScreen()
+        is ArtScreenUiState.Error -> ArtworkApiErrorScreen()
+        is ArtScreenUiState.Success -> ArtworkApiScreen(
+            onNavigateToGallery = { onNavigateToGallery()},
+            id = id,
+            imageDetails = artScreenUiState.details
+        )
+    }
+    }
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun ArtworkApiScreen(
+    onNavigateToGallery: () -> Unit,
+    id: String?,
+    modifier: Modifier = Modifier,
+    imageDetails: ImageData,
 ) {
     Scaffold(
         topBar = {
@@ -47,42 +69,56 @@ fun ArtScreen(
             )})
         }
     )
-        { paddingValues ->
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center,
-                modifier = modifier.padding(paddingValues)
+    { paddingValues ->
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center,
+            modifier = modifier
+                .fillMaxWidth()
+                .padding(paddingValues)
+        ) {
+
+            Box(
+                modifier = modifier
+                    .height(dimensionResource(id = R.dimen.image_height))
+                    .width(dimensionResource(id = R.dimen.image_width))
             ) {
-
-                Box(
-                    modifier = modifier
-                        .height(dimensionResource(id = R.dimen.image_height))
-                        .width(dimensionResource(id = R.dimen.image_width))
-                ) {
-                    ArtImage((art[id]).imageResourceID)
-                }
-
-                Row(
-                    horizontalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.button_space_between))
-                ) {
-                    PreviousButton(
-                        id,
-                        decrementState = { buttonClickLeft(id) }
-                    )
-                    NextButton(
-                        id,
-                        incrementState = { buttonClickRight(id) }
-                    )
-                }
-                ArtworkDetails(
-                    stringResource((art[id]).name),
-                    stringResource((art[id]).artist),
-                    stringResource((art[id]).year),
-                    stringResource((art[id]).description),
+                AsyncImage(
+                    model = ImageRequest.Builder(context = LocalContext.current)
+                        .data(
+                            linkBuilder(id = "$id" , "https://www.artic.edu/iiif/2")
+                        ).crossfade(true).build(),
+                    error = painterResource(R.drawable.ic_connection_error),
+                    placeholder = painterResource(R.drawable.loading_img),
+                    contentDescription = "Photo",
+                    contentScale = ContentScale.Crop,
+                    modifier = Modifier.fillMaxWidth()
                 )
             }
+            Text(text = imageDetails.title)
+
         }
     }
+}
+
+@Composable
+fun ArtworkApiLoadingScreen(
+ modifier: Modifier = Modifier
+){
+    Image(modifier = modifier.size(200.dp),
+        painter = painterResource(R.drawable.loading_img),
+        contentDescription = stringResource(R.string.loading)
+    )
+}
+@Composable
+fun ArtworkApiErrorScreen(
+    modifier: Modifier = Modifier
+){
+    Image(painter = painterResource(id = R.drawable.ic_connection_error),
+        contentDescription = stringResource(R.string.loading_failed)
+    )
+}
+
 
 @Composable
 fun ArtImage(
@@ -140,7 +176,19 @@ fun ArtworkDetails (
 @Composable
 fun ArtScreenPreview(){
     ArtSpaceGoogleCourseTheme{
-        ArtScreen(onNavigateToGallery = {}, buttonClickLeft = {}, buttonClickRight ={} , id = 0)
+        ArtScreen(
+            onNavigateToGallery = {},
+            id="1",
+            artScreenUiState = ArtScreenUiState.Success(
+            details = ImageData(
+                id = 1,
+                apiModel = " ",
+                apiLink = "",
+                isBoosted = false,
+                title = "Mona Lisa",
+                imageId = "1234"
+            )
+        ))
     }
 }
 

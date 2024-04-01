@@ -8,7 +8,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.lifecycle.viewmodel.viewModelFactory
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -35,22 +34,29 @@ fun GalleryApp(
             ArtworkScreen(
                 artworkUiState = artworkViewModel.artworkUiState,
                 retryAction = artworkViewModel::getArtworkPhotosData,
-                onArtSelect = {artworkViewModel.getArtInfo(it)}
+                onArtSelect = {navController.navigate("${Screen.Art.name}/${it.imageId}")}
             )
         }
 
         composable(
             route="${Screen.Art.name}/{id}",
             arguments = listOf(navArgument("id"){
-                type = NavType.IntType
+                type = NavType.StringType
             })
-            ){backStackEntry ->
-            val id = backStackEntry.arguments?.getInt("id") ?: 0
+            ){
+
+            backStackEntry ->
+            val id = backStackEntry.arguments?.getString("id")
+            val artScreenViewModel: ArtScreenViewModel = viewModel(factory = ArtScreenViewModel.Factory)
+            if (id != null) {
+                println(artScreenViewModel.selectedArt)
+                artScreenViewModel.setSelectedArtId(id)
+
+            }
             ArtScreen(
                 id = id,
                 onNavigateToGallery = { navController.navigate(Screen.Gallery.name)},
-                buttonClickLeft = { it:Int -> navController.navigate("${Screen.Art.name}/${it- INDEX_DECREASE}")},
-                buttonClickRight = { it:Int -> navController.navigate("${Screen.Art.name}/${it+ INDEX_INCREASE}")}
+                artScreenUiState = artScreenViewModel.artScreenUiState
         )
 
         }
