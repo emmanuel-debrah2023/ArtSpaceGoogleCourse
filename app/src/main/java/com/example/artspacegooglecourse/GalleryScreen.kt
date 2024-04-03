@@ -1,6 +1,5 @@
 package com.example.artspacegooglecourse
 
-import android.util.Log
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -17,8 +16,6 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.artspacegooglecourse.components.GalleryGrid
 import com.example.artspacegooglecourse.components.TopBar
-import com.example.artspacegooglecourse.data.INDEX_DECREASE
-import com.example.artspacegooglecourse.data.INDEX_INCREASE
 import com.example.artspacegooglecourse.data.art
 import com.example.artspacegooglecourse.ui.theme.ArtSpaceGoogleCourseTheme
 

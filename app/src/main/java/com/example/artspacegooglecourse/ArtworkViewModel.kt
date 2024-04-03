@@ -22,9 +22,6 @@ sealed interface ArtworkUiState {
     object Loading : ArtworkUiState
 }
 
-data class SelectedArtUiState(
-    var artId: Int
-)
 
 class ArtworkViewModel(private val artworkRepository: ArtworkRepository) : ViewModel() {
     /** The mutable State that stores the status of the most recent request */
@@ -54,7 +51,7 @@ class ArtworkViewModel(private val artworkRepository: ArtworkRepository) : ViewM
 
 
     /**
-     * Factory for [GalleryViewModel] that takes [artworkRepository] as a dependency
+     * Factory for [ArtworkViewModel] that takes [artworkRepository] as a dependency
      */
     companion object {
         val Factory: ViewModelProvider.Factory = viewModelFactory {
