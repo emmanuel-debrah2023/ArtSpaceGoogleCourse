@@ -1,5 +1,6 @@
 package com.example.artspacegooglecourse
 
+import android.util.Log
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -49,9 +50,7 @@ fun GalleryApp(
             val id = backStackEntry.arguments?.getString("id")
             val artScreenViewModel: ArtScreenViewModel = viewModel(factory = ArtScreenViewModel.Factory)
             if (id != null) {
-                println(artScreenViewModel.selectedArt)
                 artScreenViewModel.setSelectedArtId(id)
-
             }
             ArtScreen(
                 id = id,

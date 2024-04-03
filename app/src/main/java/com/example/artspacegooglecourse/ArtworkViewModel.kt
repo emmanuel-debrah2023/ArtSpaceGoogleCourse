@@ -52,11 +52,6 @@ class ArtworkViewModel(private val artworkRepository: ArtworkRepository) : ViewM
         }
     }
 
-    fun getArtId(it: ImageData):Int {
-        println(it.id)
-        return it.id
-    }
-
 
     /**
      * Factory for [GalleryViewModel] that takes [artworkRepository] as a dependency

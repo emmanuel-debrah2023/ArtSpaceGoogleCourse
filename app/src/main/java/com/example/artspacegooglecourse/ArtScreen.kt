@@ -95,8 +95,18 @@ fun ArtworkApiScreen(
                     modifier = Modifier.fillMaxWidth()
                 )
             }
-            Text(text = imageDetails.title)
+            Column(
+                modifier = modifier
+                    .padding(horizontal = dimensionResource(R.dimen.small_value)),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.text_vertical_space))
 
+            ) {
+                Text(
+                    text = imageDetails.title,
+                    style = MaterialTheme.typography.displayLarge
+                )
+            }
         }
     }
 }

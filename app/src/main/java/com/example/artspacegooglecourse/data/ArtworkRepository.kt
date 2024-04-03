@@ -21,7 +21,6 @@ class NetworkArtworkRepository(
 
     override suspend fun getSpecificArtworkData(id: String): ImageData {
         val photo = artworkApiService.getPhotoData(id)
-        println("The id is : $id")
         return photo.data[0]
     }
 }
