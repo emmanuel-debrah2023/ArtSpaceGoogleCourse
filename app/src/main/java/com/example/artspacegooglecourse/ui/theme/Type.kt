@@ -42,6 +42,11 @@ val Typography = Typography(
         fontWeight = FontWeight.Normal,
         fontSize = 36.sp
     ),
+    displaySmall = TextStyle(
+        fontFamily = Merriweather,
+        fontWeight = FontWeight.Normal,
+        fontSize = 24.sp
+    ),
     titleSmall = TextStyle(
         fontFamily = Merriweather,
         fontWeight = FontWeight.Normal,

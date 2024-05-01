@@ -1,4 +1,4 @@
-package com.example.artspacegooglecourse
+package com.example.artspacegooglecourse.ui.screens
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -31,8 +31,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
+import com.example.artspacegooglecourse.R
 import com.example.artspacegooglecourse.components.TopBar
-import com.example.artspacegooglecourse.data.ImageData
+import com.example.artspacegooglecourse.network.NetworkImageData
+import com.example.artspacegooglecourse.ui.ArtworkUiState
+import com.example.artspacegooglecourse.ui.model.ImageData
 import com.example.artspacegooglecourse.ui.theme.ArtSpaceGoogleCourseTheme
 import com.example.artspacegooglecourse.utils.linkBuilder
 
@@ -54,6 +57,7 @@ fun ArtworkScreen(
         )
 
         is ArtworkUiState.Error -> PhotosErrorScreen(retryAction)
+        else -> {}
     }
 }
 
@@ -153,12 +157,12 @@ fun ArtworkScreenPreview() {
         val mockData = List(10) {
             ImageData(
                 id = 1,
-                apiModel = "google.com",
-                apiLink = "Google.com/",
-                isBoosted = false,
                 title = "MonaLisa",
-                //altTitles = null,
-                imageId = "id-here"
+                imageId = "id-here",
+                shortDescription = "Art",
+                description = "Piece of art",
+                completionDate = 1999,
+                placeOfOrigin = "France"
             )
         }
         ArtworkScreen(
@@ -176,12 +180,12 @@ fun PhotoGridScreenPreview() {
         val mockData = List(10) {
             ImageData(
                 id = 1,
-                apiModel = "google.com",
-                apiLink = "Google.com/",
-                isBoosted = false,
                 title = "MonaLisa",
-                //altTitles = null,
-                imageId = "image-id-2"
+                imageId = "id-here",
+                shortDescription = "Art",
+                description = "Piece of art",
+                completionDate = 1999,
+                placeOfOrigin = "France"
             )
         }
         PhotosGridScreen(imageData = mockData, onArtSelect = {})

@@ -1,12 +1,6 @@
 package com.example.artspacegooglecourse
 
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
@@ -14,10 +8,10 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import com.example.artspacegooglecourse.components.GalleryGrid
-import com.example.artspacegooglecourse.components.TopBar
-import com.example.artspacegooglecourse.data.art
-import com.example.artspacegooglecourse.ui.theme.ArtSpaceGoogleCourseTheme
+import com.example.artspacegooglecourse.ui.ArtScreenViewModel
+import com.example.artspacegooglecourse.ui.ArtworkViewModel
+import com.example.artspacegooglecourse.ui.screens.ArtScreen
+import com.example.artspacegooglecourse.ui.screens.ArtworkScreen
 
 @Composable
 fun GalleryApp(
@@ -59,33 +53,3 @@ fun GalleryApp(
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun GalleryScreen(
-        navController: NavHostController,
-        modifier: Modifier = Modifier
-
-) {
-
-    Scaffold (
-        topBar = { TopBar() }
-    ){ innerPadding ->
-        Box(
-            modifier = modifier
-                .padding(innerPadding)
-        ) {
-            GalleryGrid(
-                art,
-                navController = navController
-            )
-        }
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GalleryScreenPreview() {
-    ArtSpaceGoogleCourseTheme {
-        GalleryScreen(navController = rememberNavController())
-    }
-}

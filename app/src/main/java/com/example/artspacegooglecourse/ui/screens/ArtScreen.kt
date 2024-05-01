@@ -1,4 +1,4 @@
-package com.example.artspacegooglecourse
+package com.example.artspacegooglecourse.ui.screens
 
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
@@ -24,14 +24,18 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
+import com.example.artspacegooglecourse.R
 import com.example.artspacegooglecourse.components.GalleryButton
 import com.example.artspacegooglecourse.components.NavTopBar
-import com.example.artspacegooglecourse.data.ImageData
+import com.example.artspacegooglecourse.network.NetworkImageData
+import com.example.artspacegooglecourse.ui.ArtScreenUiState
+import com.example.artspacegooglecourse.ui.model.ImageData
 import com.example.artspacegooglecourse.ui.theme.ArtSpaceGoogleCourseTheme
 import com.example.artspacegooglecourse.utils.linkBuilder
 
@@ -97,15 +101,28 @@ fun ArtworkApiScreen(
             }
             Column(
                 modifier = modifier
-                    .padding(horizontal = dimensionResource(R.dimen.small_value)),
+                    .padding(horizontal = dimensionResource(R.dimen.small_value), vertical = dimensionResource(
+                        R.dimen.x_small_value
+                    )),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.text_vertical_space))
 
-            ) {
+            ) {//Extract to its own composable
+                println(imageDetails.imageId)
                 Text(
                     text = imageDetails.title,
-                    style = MaterialTheme.typography.displayLarge
+                    style = MaterialTheme.typography.displayMedium
                 )
+                Text(
+                    text = "${imageDetails.completionDate}",
+                    style = MaterialTheme.typography.displayMedium
+                )
+                val description = if(imageDetails.shortDescription.isNullOrEmpty()) imageDetails.description else imageDetails.shortDescription
+                Text(text = description.replace("<p>",""),
+                    style = MaterialTheme.typography.displayMedium,
+                    maxLines = 3,
+                    overflow = TextOverflow.Ellipsis
+                    )
             }
         }
     }
@@ -192,11 +209,12 @@ fun ArtScreenPreview(){
             artScreenUiState = ArtScreenUiState.Success(
             details = ImageData(
                 id = 1,
-                apiModel = " ",
-                apiLink = "",
-                isBoosted = false,
                 title = "Mona Lisa",
-                imageId = "1234"
+                imageId = "1234",
+                shortDescription = "Lady",
+                description = "Lady on canvas",
+                completionDate = 1999,
+                placeOfOrigin = "France"
             )
         ))
     }

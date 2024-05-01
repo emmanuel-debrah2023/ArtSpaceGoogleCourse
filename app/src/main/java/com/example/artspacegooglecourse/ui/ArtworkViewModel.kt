@@ -1,7 +1,6 @@
-package com.example.artspacegooglecourse
+package com.example.artspacegooglecourse.ui
 
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
@@ -10,8 +9,11 @@ import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.AP
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
+import com.example.artspacegooglecourse.AppContainerInstance
 import com.example.artspacegooglecourse.data.ArtworkRepository
-import com.example.artspacegooglecourse.data.ImageData
+import com.example.artspacegooglecourse.network.NetworkImageData
+import com.example.artspacegooglecourse.network.mapper
+import com.example.artspacegooglecourse.ui.model.ImageData
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
 import java.io.IOException
@@ -40,7 +42,7 @@ class ArtworkViewModel(private val artworkRepository: ArtworkRepository) : ViewM
         viewModelScope.launch {
             artworkUiState = ArtworkUiState.Loading
             artworkUiState = try {
-                ArtworkUiState.Success(artworkRepository.getArtworkPhotosData())
+                ArtworkUiState.Success(artworkRepository.getArtworkPhotosData().map { it.mapper() })
             } catch (e: IOException) {
                 ArtworkUiState.Error
             } catch (e: HttpException) {
@@ -56,7 +58,7 @@ class ArtworkViewModel(private val artworkRepository: ArtworkRepository) : ViewM
     companion object {
         val Factory: ViewModelProvider.Factory = viewModelFactory {
             initializer {
-                val application = (this[APPLICATION_KEY] as ArtworkApplication)
+                val application = (this[APPLICATION_KEY] as AppContainerInstance)
                 val artworkRepository = application.container.artworkRepository
                 ArtworkViewModel(artworkRepository = artworkRepository)
             }
