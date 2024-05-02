@@ -10,8 +10,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.artspacegooglecourse.AppContainerInstance
-import com.example.artspacegooglecourse.data.ArtworkRepository
-import com.example.artspacegooglecourse.network.NetworkImageData
+import com.example.artspacegooglecourse.data.Repository
 import com.example.artspacegooglecourse.network.mapper
 import com.example.artspacegooglecourse.ui.model.ImageData
 import kotlinx.coroutines.launch
@@ -25,7 +24,7 @@ sealed interface ArtworkUiState {
 }
 
 
-class ArtworkViewModel(private val artworkRepository: ArtworkRepository) : ViewModel() {
+class PhotoGridScreenViewModel(private val repository: Repository) : ViewModel() {
     /** The mutable State that stores the status of the most recent request */
     var artworkUiState: ArtworkUiState by mutableStateOf(ArtworkUiState.Loading)
         private set
@@ -42,7 +41,7 @@ class ArtworkViewModel(private val artworkRepository: ArtworkRepository) : ViewM
         viewModelScope.launch {
             artworkUiState = ArtworkUiState.Loading
             artworkUiState = try {
-                ArtworkUiState.Success(artworkRepository.getArtworkPhotosData().map { it.mapper() })
+                ArtworkUiState.Success(repository.getArtworkPhotosData().map { it.mapper() })
             } catch (e: IOException) {
                 ArtworkUiState.Error
             } catch (e: HttpException) {
@@ -53,14 +52,14 @@ class ArtworkViewModel(private val artworkRepository: ArtworkRepository) : ViewM
 
 
     /**
-     * Factory for [ArtworkViewModel] that takes [artworkRepository] as a dependency
+     * Factory for [PhotoGridScreenViewModel] that takes [repository] as a dependency
      */
     companion object {
         val Factory: ViewModelProvider.Factory = viewModelFactory {
             initializer {
                 val application = (this[APPLICATION_KEY] as AppContainerInstance)
-                val artworkRepository = application.container.artworkRepository
-                ArtworkViewModel(artworkRepository = artworkRepository)
+                val artworkRepository = application.container.repository
+                PhotoGridScreenViewModel(repository = artworkRepository)
             }
         }
     }

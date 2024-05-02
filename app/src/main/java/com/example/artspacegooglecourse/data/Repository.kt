@@ -4,23 +4,23 @@ import com.example.artspacegooglecourse.network.ArtworkApiService
 import com.example.artspacegooglecourse.network.NetworkApiObject
 import com.example.artspacegooglecourse.network.NetworkImageData
 
-interface ArtworkRepository {
+interface Repository {
 
     suspend fun getArtworkPhotosData(): List<NetworkImageData>
 
-    suspend fun getSpecificArtworkData(id: String): NetworkImageData
+    suspend fun getSpecificArtworkData(id: Int?): NetworkImageData
 }
 
-class NetworkArtworkRepository(
+class NetworkRepository(
     private val artworkApiService: ArtworkApiService
-): ArtworkRepository {
+): Repository {
 
     override suspend fun getArtworkPhotosData(): List<NetworkImageData> {
         val photos: NetworkApiObject = artworkApiService.getPhotos()
         return photos.data
     }
 
-    override suspend fun getSpecificArtworkData(id: String): NetworkImageData {
+    override suspend fun getSpecificArtworkData(id: Int?): NetworkImageData {
         val photo = artworkApiService.getPhotoData(id)
         return photo.data[0]
     }

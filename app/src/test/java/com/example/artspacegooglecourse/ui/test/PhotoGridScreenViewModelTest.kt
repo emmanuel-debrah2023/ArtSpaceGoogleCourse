@@ -1,9 +1,8 @@
 package com.example.artspacegooglecourse.ui.test
 
 import com.example.artspacegooglecourse.ui.ArtworkUiState
-import com.example.artspacegooglecourse.ui.ArtworkViewModel
-import com.example.artspacegooglecourse.data.ArtworkRepository
-import com.example.artspacegooglecourse.network.NetworkImageData
+import com.example.artspacegooglecourse.ui.PhotoGridScreenViewModel
+import com.example.artspacegooglecourse.data.Repository
 import com.example.artspacegooglecourse.ui.model.ImageData
 import io.mockk.coEvery
 import io.mockk.mockk
@@ -17,18 +16,18 @@ import retrofit2.HttpException
 import retrofit2.Response
 
 
-class GalleryScreenViewModelTest {
+class PhotoGridScreenViewModelTest {
     @get:Rule
     val mainDispatcherRule = MainDispatcherRule()
     @Test
     fun getGalleryScreenPhotoData_UiState_Success() = runTest{
         val expectedState =  ArtworkUiState.Success(
             mutableListOf(
-                ImageData(2,"1","art piece 1", "lorem ipsum", 1999,"france")
+                ImageData(2,"1","lorem ipsum latin", "lorem ipsum","Mona Lisa", 1999,"Spain")
             )
         )
         val mockArtworkRepository = ArtScreenViewModelTest.mockRepository()
-        val viewModel = ArtworkViewModel(mockArtworkRepository)
+        val viewModel = PhotoGridScreenViewModel(mockArtworkRepository)
 
 
         advanceUntilIdle()
@@ -38,10 +37,10 @@ class GalleryScreenViewModelTest {
     @Test
     fun getGalleryScreenPhotoData_UiState_Error() = runTest{
         val expectedState = ArtworkUiState.Error
-        val mockArtworkRepository = mockk<ArtworkRepository>(relaxed = true)
-        val viewModel = ArtworkViewModel(mockArtworkRepository)
+        val mockRepository = mockk<Repository>(relaxed = true)
+        val viewModel = PhotoGridScreenViewModel(mockRepository)
 
-       coEvery { mockArtworkRepository.getArtworkPhotosData()} throws HttpException(
+       coEvery { mockRepository.getArtworkPhotosData()} throws HttpException(
             Response.error<Any>(404, ResponseBody.create(null, ""))
         )
         viewModel.getArtworkPhotosData()

@@ -7,12 +7,11 @@ import retrofit2.Retrofit
 import kotlinx.serialization.json.Json
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
-import retrofit2.create
 import java.util.concurrent.TimeUnit
 
 
 interface AppContainer {
-    val artworkRepository: ArtworkRepository
+    val repository: Repository
 }
 
 class DefaultAppContainer : AppContainer {
@@ -51,8 +50,8 @@ class DefaultAppContainer : AppContainer {
         retrofit.create(ArtworkApiService::class.java)
     }
 
-    override val artworkRepository: ArtworkRepository by lazy{
-        NetworkArtworkRepository(retrofitService)
+    override val repository: Repository by lazy{
+        NetworkRepository(retrofitService)
     }
 
 }

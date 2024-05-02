@@ -1,5 +1,6 @@
 package com.example.artspacegooglecourse.ui.screens
 
+import android.util.Log
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -16,6 +17,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
@@ -25,35 +27,43 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Devices
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.example.artspacegooglecourse.R
 import com.example.artspacegooglecourse.components.GalleryButton
 import com.example.artspacegooglecourse.components.NavTopBar
-import com.example.artspacegooglecourse.network.NetworkImageData
 import com.example.artspacegooglecourse.ui.ArtScreenUiState
+import com.example.artspacegooglecourse.ui.ArtScreenViewModel
 import com.example.artspacegooglecourse.ui.model.ImageData
-import com.example.artspacegooglecourse.ui.theme.ArtSpaceGoogleCourseTheme
 import com.example.artspacegooglecourse.utils.linkBuilder
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ArtScreen(
-    artScreenUiState: ArtScreenUiState,
+    //artScreenUiState: ArtScreenUiState,
     onNavigateToGallery: () -> Unit,
-    id: String?
+    id: Int,
+    imageId: String
 ) {
-    when(artScreenUiState){
+    val artScreenViewModel: ArtScreenViewModel = viewModel(factory = ArtScreenViewModel.Factory)
+    val screenUiState = artScreenViewModel.artScreenUiState
+    if (id != null) {
+        Log.d("VM", "GalleryApp: Calling VM :$id")
+        LaunchedEffect(Unit){
+            artScreenViewModel.getCurrentArtworkDetails(id)
+        }
+
+    }
+    when(screenUiState){
         is ArtScreenUiState.Loading -> ArtworkApiLoadingScreen()
         is ArtScreenUiState.Error -> ArtworkApiErrorScreen()
         is ArtScreenUiState.Success -> ArtworkApiScreen(
             onNavigateToGallery = { onNavigateToGallery()},
-            id = id,
-            imageDetails = artScreenUiState.details
+            imageId = imageId,
+            imageDetails = screenUiState.details
         )
     }
     }
@@ -62,7 +72,7 @@ fun ArtScreen(
 @Composable
 fun ArtworkApiScreen(
     onNavigateToGallery: () -> Unit,
-    id: String?,
+    imageId: String,
     modifier: Modifier = Modifier,
     imageDetails: ImageData,
 ) {
@@ -90,7 +100,7 @@ fun ArtworkApiScreen(
                 AsyncImage(
                     model = ImageRequest.Builder(context = LocalContext.current)
                         .data(
-                            linkBuilder(id = "$id" , "https://www.artic.edu/iiif/2")
+                            linkBuilder(id = "$imageId" , "https://www.artic.edu/iiif/2")
                         ).crossfade(true).build(),
                     error = painterResource(R.drawable.ic_connection_error),
                     placeholder = painterResource(R.drawable.loading_img),
@@ -117,7 +127,7 @@ fun ArtworkApiScreen(
                     text = "${imageDetails.completionDate}",
                     style = MaterialTheme.typography.displayMedium
                 )
-                val description = if(imageDetails.shortDescription.isNullOrEmpty()) imageDetails.description else imageDetails.shortDescription
+                val description = imageDetails.shortDescription.ifEmpty { imageDetails.description }
                 Text(text = description.replace("<p>",""),
                     style = MaterialTheme.typography.displayMedium,
                     maxLines = 3,
@@ -199,24 +209,24 @@ fun ArtworkDetails (
     }
 }
 
-@Preview(showBackground = true, device = Devices.PIXEL_3A)
-@Composable
-fun ArtScreenPreview(){
-    ArtSpaceGoogleCourseTheme{
-        ArtScreen(
-            onNavigateToGallery = {},
-            id="1",
-            artScreenUiState = ArtScreenUiState.Success(
-            details = ImageData(
-                id = 1,
-                title = "Mona Lisa",
-                imageId = "1234",
-                shortDescription = "Lady",
-                description = "Lady on canvas",
-                completionDate = 1999,
-                placeOfOrigin = "France"
-            )
-        ))
-    }
-}
+//@Preview(showBackground = true, device = Devices.PIXEL_3A)
+//@Composable
+//fun ArtScreenPreview(){
+//    ArtSpaceGoogleCourseTheme{
+//        ArtScreen(
+//            onNavigateToGallery = {},
+//            id="1",
+//            artScreenUiState = ArtScreenUiState.Success(
+//            details = ImageData(
+//                id = 1,
+//                title = "Mona Lisa",
+//                imageId = "1234",
+//                shortDescription = "Lady",
+//                description = "Lady on canvas",
+//                completionDate = 1999,
+//                placeOfOrigin = "France"
+//            )
+//        ))
+//    }
+//}
 

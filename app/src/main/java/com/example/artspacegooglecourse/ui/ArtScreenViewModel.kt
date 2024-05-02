@@ -9,14 +9,9 @@ import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.artspacegooglecourse.AppContainerInstance
-import com.example.artspacegooglecourse.data.ArtworkRepository
-import com.example.artspacegooglecourse.network.NetworkImageData
+import com.example.artspacegooglecourse.data.Repository
 import com.example.artspacegooglecourse.network.mapper
 import com.example.artspacegooglecourse.ui.model.ImageData
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
 
@@ -27,7 +22,7 @@ sealed interface ArtScreenUiState {
     object Loading : ArtScreenUiState
 }
 
-class ArtScreenViewModel(private val artworkRepository: ArtworkRepository) : ViewModel(){
+class ArtScreenViewModel(private val repository: Repository) : ViewModel(){
 
     //private val _uiState = MutableStateFlow(ScreenUiState())
     //val uiState : StateFlow<ScreenUiState> = _uiState.asStateFlow()
@@ -48,11 +43,11 @@ class ArtScreenViewModel(private val artworkRepository: ArtworkRepository) : Vie
     fun getSelectedArtId() = selectedArt
 
 
-    fun getCurrentArtworkDetails(){
+    fun getCurrentArtworkDetails(id: Int?) {
         viewModelScope.launch {
             artScreenUiState = ArtScreenUiState.Loading
             artScreenUiState = try {
-                ArtScreenUiState.Success(artworkRepository.getSpecificArtworkData(selectedArt).mapper())
+                ArtScreenUiState.Success(repository.getSpecificArtworkData(id).mapper())
             } catch (e:HttpException){
                 ArtScreenUiState.Error
             }
@@ -60,16 +55,13 @@ class ArtScreenViewModel(private val artworkRepository: ArtworkRepository) : Vie
         }
     }
 
-    init{
-        getCurrentArtworkDetails()
-    }
 
     companion object {
         val Factory: ViewModelProvider.Factory = viewModelFactory {
             initializer {
                 val application = (this[ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY] as AppContainerInstance)
-                val artworkRepository = application.container.artworkRepository
-                ArtScreenViewModel(artworkRepository = artworkRepository)
+                val artworkRepository = application.container.repository
+                ArtScreenViewModel(repository = artworkRepository)
             }
         }
     }

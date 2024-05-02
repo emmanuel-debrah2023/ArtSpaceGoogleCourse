@@ -10,7 +10,7 @@ interface ArtworkApiService {
 
     @GET("artworks")
     suspend fun getPhotoData(
-        @Query("ids") id: String,
-        @Query("limit") limit : Int = 10
+        @Query("ids") id: Int?,
+        @Query("limit") limit: Int = 10
     ): NetworkApiObject
 }
