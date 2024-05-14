@@ -47,13 +47,13 @@ data class NetworkImageData(
     @SerialName("image_id")
     val imageId: String = "",
     @SerialName("description")
-    val description: String= "",
+    val description: String = "",
     @SerialName("short_description")
-    val shortDescription: String= "",
+    val shortDescription: String = "",
     @SerialName("date_end")
-    val completionDate: Int=0,
+    val completionDate: Int = 0,
     @SerialName("place_of_origin")
-    val placeOfOrigin: String
+    val placeOfOrigin: String = ""
 )
 fun NetworkImageData.mapper() = ImageData(
     id = id,

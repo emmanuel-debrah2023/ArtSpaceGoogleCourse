@@ -22,24 +22,22 @@ sealed interface ArtScreenUiState {
     object Loading : ArtScreenUiState
 }
 
-class ArtScreenViewModel(private val repository: Repository) : ViewModel(){
-
-    //private val _uiState = MutableStateFlow(ScreenUiState())
-    //val uiState : StateFlow<ScreenUiState> = _uiState.asStateFlow()
-
-    var artScreenUiState: ArtScreenUiState by mutableStateOf(ArtScreenUiState.Loading)//MaybeChange to request state ?
+class ArtScreenViewModel(private val repository: Repository) : ViewModel() {
+    var artScreenUiState: ArtScreenUiState by mutableStateOf(ArtScreenUiState.Loading)
+        //MaybeChange to request state ?
         private set
 
     private val _selectedArt = mutableStateOf("")
-    val selectedArt : String
+    private val selectedArt: String
         get() = _selectedArt.value
 
-    fun setSelectedArtId(newId: String){
+    fun setSelectedArtId(newId: String) {
 
         _selectedArt.value = newId
         println("new id selected is:$newId")
         println("state value is:$selectedArt")
     }
+
     fun getSelectedArtId() = selectedArt
 
 
@@ -47,8 +45,8 @@ class ArtScreenViewModel(private val repository: Repository) : ViewModel(){
         viewModelScope.launch {
             artScreenUiState = ArtScreenUiState.Loading
             artScreenUiState = try {
-                ArtScreenUiState.Success(repository.getSpecificArtworkData(id).mapper())
-            } catch (e:HttpException){
+                ArtScreenUiState.Success(repository.getImageData(id).mapper())
+            } catch (e: HttpException) {
                 ArtScreenUiState.Error
             }
 
@@ -59,9 +57,10 @@ class ArtScreenViewModel(private val repository: Repository) : ViewModel(){
     companion object {
         val Factory: ViewModelProvider.Factory = viewModelFactory {
             initializer {
-                val application = (this[ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY] as AppContainerInstance)
-                val artworkRepository = application.container.repository
-                ArtScreenViewModel(repository = artworkRepository)
+                val application =
+                    (this[ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY] as AppContainerInstance)
+                val repository = application.container.repository
+                ArtScreenViewModel(repository = repository)
             }
         }
     }

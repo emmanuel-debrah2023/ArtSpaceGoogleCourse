@@ -17,35 +17,35 @@ import kotlinx.coroutines.launch
 import retrofit2.HttpException
 import java.io.IOException
 
-sealed interface ArtworkUiState {
-    data class Success(val photos: List<ImageData>) : ArtworkUiState
-    object Error : ArtworkUiState
-    object Loading : ArtworkUiState
+sealed interface PhotoGridScreenUiState {
+    data class Success(val photos: List<ImageData>) : PhotoGridScreenUiState
+    object Error : PhotoGridScreenUiState
+    object Loading : PhotoGridScreenUiState
 }
 
 
 class PhotoGridScreenViewModel(private val repository: Repository) : ViewModel() {
     /** The mutable State that stores the status of the most recent request */
-    var artworkUiState: ArtworkUiState by mutableStateOf(ArtworkUiState.Loading)
+    var artworkUiState: PhotoGridScreenUiState by mutableStateOf(PhotoGridScreenUiState.Loading)
         private set
 
 
     /**
-     * Call getArtworkPhotos() on init so we can display status immediately.
+     * Call getPhotoGridData() on init so we can display status immediately.
      */
     init {
-        getArtworkPhotosData()
+        getPhotoGridData()
     }
 
-    fun getArtworkPhotosData() {
+    fun getPhotoGridData() {
         viewModelScope.launch {
-            artworkUiState = ArtworkUiState.Loading
+            artworkUiState = PhotoGridScreenUiState.Loading
             artworkUiState = try {
-                ArtworkUiState.Success(repository.getArtworkPhotosData().map { it.mapper() })
+                PhotoGridScreenUiState.Success(repository.getImageDataList().map { it.mapper() })
             } catch (e: IOException) {
-                ArtworkUiState.Error
+                PhotoGridScreenUiState.Error
             } catch (e: HttpException) {
-                ArtworkUiState.Error
+                PhotoGridScreenUiState.Error
             }
         }
     }
@@ -58,8 +58,8 @@ class PhotoGridScreenViewModel(private val repository: Repository) : ViewModel()
         val Factory: ViewModelProvider.Factory = viewModelFactory {
             initializer {
                 val application = (this[APPLICATION_KEY] as AppContainerInstance)
-                val artworkRepository = application.container.repository
-                PhotoGridScreenViewModel(repository = artworkRepository)
+                val repository = application.container.repository
+                PhotoGridScreenViewModel(repository = repository)
             }
         }
     }

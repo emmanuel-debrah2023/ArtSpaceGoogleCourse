@@ -1,12 +1,10 @@
 package com.example.artspacegooglecourse.ui.screens
 
 import android.util.Log
-import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -25,7 +23,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -40,10 +37,8 @@ import com.example.artspacegooglecourse.ui.model.ImageData
 import com.example.artspacegooglecourse.utils.linkBuilder
 
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ArtScreen(
-    //artScreenUiState: ArtScreenUiState,
     onNavigateToGallery: () -> Unit,
     id: Int,
     imageId: String
@@ -52,21 +47,21 @@ fun ArtScreen(
     val screenUiState = artScreenViewModel.artScreenUiState
     if (id != null) {
         Log.d("VM", "GalleryApp: Calling VM :$id")
-        LaunchedEffect(Unit){
+        LaunchedEffect(Unit) {
             artScreenViewModel.getCurrentArtworkDetails(id)
         }
 
     }
-    when(screenUiState){
+    when (screenUiState) {
         is ArtScreenUiState.Loading -> ArtworkApiLoadingScreen()
         is ArtScreenUiState.Error -> ArtworkApiErrorScreen()
         is ArtScreenUiState.Success -> ArtworkApiScreen(
-            onNavigateToGallery = { onNavigateToGallery()},
+            onNavigateToGallery = { onNavigateToGallery() },
             imageId = imageId,
             imageDetails = screenUiState.details
         )
     }
-    }
+}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -78,9 +73,11 @@ fun ArtworkApiScreen(
 ) {
     Scaffold(
         topBar = {
-            NavTopBar(iconBtn = { GalleryButton(
-                onGalleryClick = {onNavigateToGallery()}
-            )})
+            NavTopBar(iconBtn = {
+                GalleryButton(
+                    onGalleryClick = { onNavigateToGallery() }
+                )
+            })
         }
     )
     { paddingValues ->
@@ -100,7 +97,7 @@ fun ArtworkApiScreen(
                 AsyncImage(
                     model = ImageRequest.Builder(context = LocalContext.current)
                         .data(
-                            linkBuilder(id = "$imageId" , "https://www.artic.edu/iiif/2")
+                            linkBuilder(id = imageId, "https://www.artic.edu/iiif/2")
                         ).crossfade(true).build(),
                     error = painterResource(R.drawable.ic_connection_error),
                     placeholder = painterResource(R.drawable.loading_img),
@@ -111,9 +108,12 @@ fun ArtworkApiScreen(
             }
             Column(
                 modifier = modifier
-                    .padding(horizontal = dimensionResource(R.dimen.small_value), vertical = dimensionResource(
-                        R.dimen.x_small_value
-                    )),
+                    .padding(
+                        horizontal = dimensionResource(R.dimen.small_value),
+                        vertical = dimensionResource(
+                            R.dimen.x_small_value
+                        )
+                    ),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.text_vertical_space))
 
@@ -128,11 +128,12 @@ fun ArtworkApiScreen(
                     style = MaterialTheme.typography.displayMedium
                 )
                 val description = imageDetails.shortDescription.ifEmpty { imageDetails.description }
-                Text(text = description.replace("<p>",""),
+                Text(
+                    text = description.replace("<p>", ""),
                     style = MaterialTheme.typography.displayMedium,
                     maxLines = 3,
                     overflow = TextOverflow.Ellipsis
-                    )
+                )
             }
         }
     }
@@ -140,93 +141,21 @@ fun ArtworkApiScreen(
 
 @Composable
 fun ArtworkApiLoadingScreen(
- modifier: Modifier = Modifier
-){
-    Image(modifier = modifier.size(200.dp),
+    modifier: Modifier = Modifier
+) {
+    Image(
+        modifier = modifier.size(200.dp),
         painter = painterResource(R.drawable.loading_img),
         contentDescription = stringResource(R.string.loading)
     )
 }
+
 @Composable
 fun ArtworkApiErrorScreen(
     modifier: Modifier = Modifier
-){
-    Image(painter = painterResource(id = R.drawable.ic_connection_error),
+) {
+    Image(
+        painter = painterResource(id = R.drawable.ic_connection_error),
         contentDescription = stringResource(R.string.loading_failed)
     )
 }
-
-
-@Composable
-fun ArtImage(
-    @DrawableRes artImage: Int
-) {
-    Image(
-        painter = painterResource(artImage),
-        contentDescription = null,
-        contentScale = ContentScale.Crop
-    )
-}
-
-
-@Composable
-fun ArtworkDetails (
-    artTitle: String,
-    artistName: String,
-    artistYear: String,
-    artDescription: String,
-    modifier: Modifier = Modifier
-) {
-    Column(
-        modifier = modifier
-            .padding(horizontal = dimensionResource(R.dimen.small_value)),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.text_vertical_space))
-
-    )
-    {
-        Text(
-            artTitle,
-            style = MaterialTheme.typography.displayLarge
-        )
-        Row(
-            horizontalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.x_small_value))
-        ) {
-            Text(
-                artistName,
-                style = MaterialTheme.typography.displayMedium
-            )
-            Text(
-                text = artistYear,
-                style = MaterialTheme.typography.displayMedium
-            )
-        }
-        Text(
-            artDescription,
-            textAlign = TextAlign.Center,
-            style = MaterialTheme.typography.bodyLarge
-        )
-    }
-}
-
-//@Preview(showBackground = true, device = Devices.PIXEL_3A)
-//@Composable
-//fun ArtScreenPreview(){
-//    ArtSpaceGoogleCourseTheme{
-//        ArtScreen(
-//            onNavigateToGallery = {},
-//            id="1",
-//            artScreenUiState = ArtScreenUiState.Success(
-//            details = ImageData(
-//                id = 1,
-//                title = "Mona Lisa",
-//                imageId = "1234",
-//                shortDescription = "Lady",
-//                description = "Lady on canvas",
-//                completionDate = 1999,
-//                placeOfOrigin = "France"
-//            )
-//        ))
-//    }
-//}
-

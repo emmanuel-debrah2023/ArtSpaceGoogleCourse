@@ -1,6 +1,5 @@
 package com.example.artspacegooglecourse.network
 
-//import com.example.artspacegooglecourse.data.Result
 import retrofit2.http.GET
 import retrofit2.http.Query
 

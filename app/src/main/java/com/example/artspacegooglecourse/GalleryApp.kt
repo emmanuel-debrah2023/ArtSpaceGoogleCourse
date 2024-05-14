@@ -9,7 +9,6 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import com.example.artspacegooglecourse.ui.ArtScreenViewModel
 import com.example.artspacegooglecourse.ui.PhotoGridScreenViewModel
 import com.example.artspacegooglecourse.ui.screens.ArtScreen
 import com.example.artspacegooglecourse.ui.screens.ArtworkScreen
@@ -29,7 +28,7 @@ fun GalleryApp(
                 viewModel(factory = PhotoGridScreenViewModel.Factory)
             ArtworkScreen(
                 artworkUiState = photoGridScreenViewModel.artworkUiState,
-                retryAction = photoGridScreenViewModel::getArtworkPhotosData,
+                retryAction = photoGridScreenViewModel::getPhotoGridData,
                 onArtSelect = { navController.navigate("${Screen.Art.name}/${it.id}/${it.imageId}") }
             )
         }

@@ -1,9 +1,7 @@
 package com.example.artspacegooglecourse.ui.model
 
-import com.example.artspacegooglecourse.network.NetworkImageData
 
-
-data class ImageData internal constructor(
+data class ImageData (
     val id: Int,
     val imageId: String,
     val description: String,
@@ -11,14 +9,4 @@ data class ImageData internal constructor(
     val title: String,
     val completionDate:Int,
     val placeOfOrigin:String,
-){ constructor(networkImageData : NetworkImageData ): this(
-    id = networkImageData.id,
-    imageId = networkImageData.imageId,
-    description = networkImageData.description,
-    shortDescription = networkImageData.shortDescription,
-    title = networkImageData.title,
-    completionDate = networkImageData.completionDate,
-    placeOfOrigin = networkImageData.placeOfOrigin
 )
-
-}

@@ -6,21 +6,21 @@ import com.example.artspacegooglecourse.network.NetworkImageData
 
 interface Repository {
 
-    suspend fun getArtworkPhotosData(): List<NetworkImageData>
+    suspend fun getImageDataList(): List<NetworkImageData>
 
-    suspend fun getSpecificArtworkData(id: Int?): NetworkImageData
+    suspend fun getImageData(id: Int?): NetworkImageData
 }
 
 class NetworkRepository(
     private val artworkApiService: ArtworkApiService
 ): Repository {
 
-    override suspend fun getArtworkPhotosData(): List<NetworkImageData> {
+    override suspend fun getImageDataList(): List<NetworkImageData> {
         val photos: NetworkApiObject = artworkApiService.getPhotos()
         return photos.data
     }
 
-    override suspend fun getSpecificArtworkData(id: Int?): NetworkImageData {
+    override suspend fun getImageData(id: Int?): NetworkImageData {
         val photo = artworkApiService.getPhotoData(id)
         return photo.data[0]
     }

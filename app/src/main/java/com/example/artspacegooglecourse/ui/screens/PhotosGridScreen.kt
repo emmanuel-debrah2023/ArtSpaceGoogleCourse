@@ -33,31 +33,28 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.example.artspacegooglecourse.R
 import com.example.artspacegooglecourse.components.TopBar
-import com.example.artspacegooglecourse.network.NetworkImageData
-import com.example.artspacegooglecourse.ui.ArtworkUiState
+import com.example.artspacegooglecourse.ui.PhotoGridScreenUiState
 import com.example.artspacegooglecourse.ui.model.ImageData
 import com.example.artspacegooglecourse.ui.theme.ArtSpaceGoogleCourseTheme
 import com.example.artspacegooglecourse.utils.linkBuilder
 
 @Composable
 fun ArtworkScreen(
-    artworkUiState: ArtworkUiState,
+    artworkUiState: PhotoGridScreenUiState,
     modifier: Modifier = Modifier,
     retryAction: () -> Unit,
     contentPadding: PaddingValues = PaddingValues(0.dp),
     onArtSelect: (ImageData) -> Unit
 ) {
     when (artworkUiState) {
-        is ArtworkUiState.Loading -> PhotosLoadingScreen(modifier = modifier.fillMaxSize())
-        is ArtworkUiState.Success -> PhotosGridScreen(
+        is PhotoGridScreenUiState.Loading -> PhotosLoadingScreen(modifier = modifier.fillMaxSize())
+        is PhotoGridScreenUiState.Success -> PhotosGridScreen(
             imageData = artworkUiState.photos,
-            contentPadding = contentPadding,
             onArtSelect = {onArtSelect(it)},
             modifier = modifier
         )
 
-        is ArtworkUiState.Error -> PhotosErrorScreen(retryAction)
-        else -> {}
+        is PhotoGridScreenUiState.Error -> PhotosErrorScreen(retryAction)
     }
 }
 
@@ -66,7 +63,6 @@ fun ArtworkScreen(
 fun PhotosGridScreen(
     imageData: List<ImageData>,
     modifier: Modifier = Modifier,
-    contentPadding: PaddingValues = PaddingValues(0.dp),
     onArtSelect: (ImageData) -> Unit,
 ) {
     Scaffold(
@@ -166,7 +162,7 @@ fun ArtworkScreenPreview() {
             )
         }
         ArtworkScreen(
-            ArtworkUiState.Success(mockData),
+            PhotoGridScreenUiState.Success(mockData),
             retryAction = {},
             onArtSelect = {},
         )

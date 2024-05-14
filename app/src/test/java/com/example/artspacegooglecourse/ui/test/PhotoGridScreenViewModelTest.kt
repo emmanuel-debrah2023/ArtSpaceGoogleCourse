@@ -1,15 +1,16 @@
 package com.example.artspacegooglecourse.ui.test
 
-import com.example.artspacegooglecourse.ui.ArtworkUiState
+import com.example.artspacegooglecourse.ui.PhotoGridScreenUiState
 import com.example.artspacegooglecourse.ui.PhotoGridScreenViewModel
 import com.example.artspacegooglecourse.data.Repository
+import com.example.artspacegooglecourse.network.NetworkImageData
 import com.example.artspacegooglecourse.ui.model.ImageData
 import io.mockk.coEvery
 import io.mockk.mockk
-import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
-import okhttp3.ResponseBody
+import okhttp3.ResponseBody.Companion.toResponseBody
 import org.junit.Assert.assertEquals
+import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import retrofit2.HttpException
@@ -17,35 +18,55 @@ import retrofit2.Response
 
 
 class PhotoGridScreenViewModelTest {
+    private val mockRepository = mockk<Repository>(relaxed = true)
+    private lateinit var viewModel: PhotoGridScreenViewModel
+
     @get:Rule
     val mainDispatcherRule = MainDispatcherRule()
+
+    @Before
+    fun setUp() {
+        viewModel = PhotoGridScreenViewModel(mockRepository)
+    }
+
     @Test
-    fun getGalleryScreenPhotoData_UiState_Success() = runTest{
-        val expectedState =  ArtworkUiState.Success(
+    fun `PhotoGridScreenViewModel successful api call`() = runTest {
+        val expectedState = PhotoGridScreenUiState.Success(
             mutableListOf(
-                ImageData(2,"1","lorem ipsum latin", "lorem ipsum","Mona Lisa", 1999,"Spain")
+                ImageData(2, "1", "lorem ipsum latin", "lorem ipsum", "Mona Lisa", 1999, "Spain")
             )
         )
-        val mockArtworkRepository = ArtScreenViewModelTest.mockRepository()
-        val viewModel = PhotoGridScreenViewModel(mockArtworkRepository)
 
+        coEvery { mockRepository.getImageDataList() } returns mutableListOf(
+            NetworkImageData(
+                2,
+                "1",
+                "html.com",
+                true,
+                "Mona Lisa",
+                "1",
+                "lorem ipsum latin",
+                "lorem ipsum",
+                1999,
+                "Spain"
+            )
+        )
 
-        advanceUntilIdle()
+        viewModel.getPhotoGridData()
         assertEquals(expectedState, viewModel.artworkUiState)
     }
 
     @Test
-    fun getGalleryScreenPhotoData_UiState_Error() = runTest{
-        val expectedState = ArtworkUiState.Error
-        val mockRepository = mockk<Repository>(relaxed = true)
-        val viewModel = PhotoGridScreenViewModel(mockRepository)
+    fun `PhotoGridScreenViewModel error on api call`() = runTest {
+        val expectedState = PhotoGridScreenUiState.Error
 
-       coEvery { mockRepository.getArtworkPhotosData()} throws HttpException(
-            Response.error<Any>(404, ResponseBody.create(null, ""))
+        coEvery { mockRepository.getImageDataList() } throws HttpException(
+            Response.error<Any>(
+                404, "".toResponseBody(null)
+            )
         )
-        viewModel.getArtworkPhotosData()
 
-
+        viewModel.getPhotoGridData()
         assertEquals(expectedState, viewModel.artworkUiState)
     }
 }
