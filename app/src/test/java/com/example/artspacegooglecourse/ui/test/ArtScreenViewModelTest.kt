@@ -8,81 +8,121 @@ import com.example.artspacegooglecourse.ui.model.ImageData
 import org.junit.Assert.assertEquals
 import org.junit.Test
 import io.mockk.coEvery
+import io.mockk.coVerify
 import io.mockk.impl.annotations.MockK
 import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.newCoroutineContext
+import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 import okhttp3.ResponseBody
+import org.junit.Before
 import org.junit.Rule
 import retrofit2.HttpException
 import retrofit2.Response
 
-// Reusable JUnit4 TestRule to override the Main dispatcher
 
-val exampleObj = ImageData(2,"1","lorem ipsum latin","lorem ipsum","Mona Lisa",1999, "Spain")
+
+val exampleObj = ImageData(2, "1", "lorem ipsum latin", "lorem ipsum", "Mona Lisa", 1999, "Spain")
 
 class ArtScreenViewModelTest {
+    private  val mockArtworkRepository = mockk<Repository>(relaxed = true)
+    private lateinit var viewModel: ArtScreenViewModel
+
+
     @get:Rule
     val mainDispatcherRule = MainDispatcherRule()
+
+    @Before
+    fun setUp() {
+        viewModel = ArtScreenViewModel(mockArtworkRepository)
+    }
+
     @MockK
-    class mockRepository: Repository {
+    class mockRepository : Repository {
 
         override suspend fun getArtworkPhotosData(): List<NetworkImageData> {
             val mockListData: List<NetworkImageData> = mutableListOf(
-                NetworkImageData(2,"1","html.com",true,"Mona Lisa", "1","lorem ipsum latin", "lorem ipsum",1999, "Spain")
+                NetworkImageData(
+                    2,
+                    "1",
+                    "html.com",
+                    true,
+                    "Mona Lisa",
+                    "1",
+                    "lorem ipsum latin",
+                    "lorem ipsum",
+                    1999,
+                    "Spain"
+                )
             )
             return mockListData
         }
 
         override suspend fun getSpecificArtworkData(id: Int?): NetworkImageData {
-            val mockPhotoData: NetworkImageData = NetworkImageData(2,"1","html.com",true,"Mona Lisa", "1","lorem ipsum latin", "lorem ipsum",1999,"Spain")
+            val mockPhotoData = NetworkImageData(
+                2,
+                "1",
+                "html.com",
+                true,
+                "Mona Lisa",
+                "1",
+                "lorem ipsum latin",
+                "lorem ipsum",
+                1999,
+                "Spain"
+            )
             return mockPhotoData
         }
     }
 
 
-
-
-
+    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun getArtScreenDetails_UiState_Success() = runTest{
-        val expectedState = ArtScreenUiState.Success(
-            exampleObj
-        )
-        val mockArtworkRepository = mockRepository()
-        val viewModel = ArtScreenViewModel(mockArtworkRepository)
+    fun `getArtScreenDetails successful response`() = runTest {
+        val expectedState = ArtScreenUiState.Success(exampleObj)
 
-        advanceUntilIdle()
-        val checkVal = viewModel.artScreenUiState
-        assertEquals(expectedState, checkVal)
+        coEvery { mockArtworkRepository.getSpecificArtworkData(any()) } returns NetworkImageData(
+            2,
+            "1",
+            "html.com",
+            true,
+            "Mona Lisa",
+            "1",
+            "lorem ipsum latin",
+            "lorem ipsum",
+            1999,
+            "Spain"
+        )
+        viewModel.getCurrentArtworkDetails(2)
+
+        assertEquals(expectedState, viewModel.artScreenUiState)
     }
 
 
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun getArtScreenDetails_UiState_Error() = runTest{
+    fun `getArtScreenDetails handling error response`() = runTest {
         val expectedState = ArtScreenUiState.Error
-        val mockRepository = mockk<Repository>(relaxed = true)
-        val viewModel = ArtScreenViewModel(mockRepository)
 
-        coEvery { mockRepository.getSpecificArtworkData(any())} throws HttpException(
-                Response.error<Any>(404, ResponseBody.create(null, ""))
+
+        coEvery { mockArtworkRepository.getSpecificArtworkData(any()) } throws HttpException(
+            Response.error<Any>(404, ResponseBody.create(null, ""))
         )
-        viewModel.getCurrentArtworkDetails(id)
+        viewModel.getCurrentArtworkDetails(2)
 
 
         assertEquals(expectedState, viewModel.artScreenUiState)
     }
 
     @Test
-    fun selectedArt_Updated_Successfully() = runTest{
+    fun `setSelectedArt updating state`() = runTest {
         val selectedArtValue = "2"
-        val mockRepository = mockk<Repository>(relaxed = true)
-        val viewModel = ArtScreenViewModel(mockRepository)
         viewModel.setSelectedArtId("2")
 
         advanceUntilIdle()
-        assertEquals(selectedArtValue,viewModel.getSelectedArtId())
+        assertEquals(selectedArtValue, viewModel.getSelectedArtId())
     }
 }
