@@ -11,35 +11,39 @@ import java.util.concurrent.TimeUnit
 
 
 interface AppContainer {
-    val artworkRepository: ArtworkRepository
+    val repository: Repository
 }
 
 class DefaultAppContainer : AppContainer {
     private val baseUrl = "https://api.artic.edu/api/v1/"
 
-    val intercepter = HttpLoggingInterceptor().apply {
+    private val intercepter = HttpLoggingInterceptor().apply {
         this.level = HttpLoggingInterceptor.Level.BODY
     }
 
-    val client = OkHttpClient.Builder().apply {
+    private val client = OkHttpClient.Builder().apply {
         this.addInterceptor(intercepter)
-            .connectTimeout(3,TimeUnit.SECONDS)
-            .readTimeout(20,TimeUnit.SECONDS)
-            .writeTimeout(25,TimeUnit.SECONDS)
+            .connectTimeout(3, TimeUnit.SECONDS)
+            .readTimeout(20, TimeUnit.SECONDS)
+            .writeTimeout(25, TimeUnit.SECONDS)
     }
 
     private val retrofit: Retrofit = Retrofit.Builder()
-        .addConverterFactory(Json{ignoreUnknownKeys = true; coerceInputValues = true}.asConverterFactory("application/json".toMediaType()))
+        .addConverterFactory(Json {
+            ignoreUnknownKeys = true; coerceInputValues = true
+        }.asConverterFactory("application/json".toMediaType()))
         .baseUrl(baseUrl)
         .client(client.build())
         .build()
+
 
     private val retrofitService: ArtworkApiService by lazy {
         retrofit.create(ArtworkApiService::class.java)
     }
 
-    override val artworkRepository: ArtworkRepository by lazy{
-        NetworkArtworkRepository(retrofitService)
+
+    override val repository: Repository by lazy {
+        NetworkRepository(retrofitService)
     }
 
 }

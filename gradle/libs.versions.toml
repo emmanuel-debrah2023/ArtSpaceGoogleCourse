@@ -17,7 +17,10 @@
 "kotlinxJson" = "1.6.0"
 "kotlinSerialization" = "1.8.10"
 "coil" = "2.4.0"
+"coroutines" = "1.8.1-Beta"
 "logging-interceptor" = "4.12.0"
+"mockk" = "1.13.10"
+
 
 
 
@@ -44,6 +47,9 @@ androidx-navigation-dynamic = { group = "androidx.navigation", name="navigation-
 androidx-navigation-compose = { group = "androidx.navigation", name ="navigation-compose", version.ref = "androidxNavigation"}
 #Testing
 junit = { group = "junit", name ="junit",version.ref="junit"}
+mockk = { group = "io.mockk", name = "mockk", version.ref="mockk"}
+coroutines = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref="coroutines"}
+coroutines-test = {group = "org.jetbrains.kotlinx", name= "kotlinx-coroutines-test", version.ref= "coroutines"}
 androidx-navigation-testing = { group = "androidx.navigation", name = "navigation-testing", version.ref = "androidxNavigation"}
 androidx-test-ext = { group = "androidx.test.ext", name = "junit", version.ref = "androidxTestExt"}
 androidx-test-espresso = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "androidTestEspresso" }
