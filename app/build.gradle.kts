@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.serialization)
+    alias(libs.plugins.ksp)
 }
 
 android {
@@ -72,6 +73,9 @@ dependencies {
     implementation(libs.json)
     implementation(libs.logging.interceptor)
     implementation(libs.coil)
+    implementation(libs.androidx.room.runtime)
+    implementation(libs.androidx.room.compiler)
+    ksp(libs.androidx.room.ksp)
     testImplementation(libs.junit)
     testImplementation(libs.mockk)
     testImplementation(libs.coroutines)
