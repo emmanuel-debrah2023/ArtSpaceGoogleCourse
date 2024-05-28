@@ -7,8 +7,6 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class NetworkApiObject(
-   // @SerialName("pagination")
-    //val networkPagination: NetworkPagination? = null,
     @SerialName("data")
     val data: List<NetworkImageData>,
     @SerialName("info")
@@ -17,21 +15,7 @@ data class NetworkApiObject(
     val networkConfig: NetworkConfig
 )
 
-//@Serializable
-//data class NetworkPagination(
-//    @SerialName("total")
-//    val total: Int,
-//    @SerialName("limit")
-//    val limit: Int,
-//    @SerialName("offset")
-//    val offset: Int,
-//    @SerialName("total_pages")
-//    val totalPages: Int,
-//    @SerialName("current_page")
-//    val currentPage: Int,
-//    @SerialName("next_url")
-//    val nextUrl: String
-//)
+
 @Serializable
 data class NetworkImageData(
     @SerialName(value = "id")
