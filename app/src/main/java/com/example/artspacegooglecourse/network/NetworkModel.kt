@@ -1,5 +1,6 @@
 package com.example.artspacegooglecourse.network
 
+import com.example.artspacegooglecourse.data.db.ImageDataEntity
 import com.example.artspacegooglecourse.ui.model.ImageData
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -39,7 +40,7 @@ data class NetworkImageData(
     @SerialName("place_of_origin")
     val placeOfOrigin: String = ""
 )
-fun NetworkImageData.mapper() = ImageData(
+fun NetworkImageData.uiModelMapper() = ImageData(
     id = id,
     imageId = imageId,
     title = title,
@@ -47,6 +48,19 @@ fun NetworkImageData.mapper() = ImageData(
     shortDescription = shortDescription,
     completionDate = completionDate,
     placeOfOrigin = placeOfOrigin
+)
+
+fun  NetworkImageData.entityMapper() = ImageDataEntity(
+    apiId = id,
+    imageId = imageId,
+    title = title,
+    description = description,
+    shortDescription = shortDescription,
+    completionDate = completionDate,
+    placeOfOrigin = placeOfOrigin,
+    apiModel = apiModel,
+    apiLink = apiLink,
+    isBoosted = isBoosted
 )
 
 

@@ -10,10 +10,9 @@ import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.artspacegooglecourse.AppContainerInstance
 import com.example.artspacegooglecourse.data.Repository
-import com.example.artspacegooglecourse.network.mapper
+import com.example.artspacegooglecourse.data.db.uiModelMapper
 import com.example.artspacegooglecourse.ui.model.ImageData
 import kotlinx.coroutines.launch
-import retrofit2.HttpException
 
 sealed interface ArtScreenUiState {
 
@@ -41,12 +40,13 @@ class ArtScreenViewModel(private val repository: Repository) : ViewModel() {
     fun getSelectedArtId() = selectedArt
 
 
-    fun getCurrentArtworkDetails(id: Int?) {
+    fun getCurrentArtworkDetails(id: Int) {
         viewModelScope.launch {
             artScreenUiState = ArtScreenUiState.Loading
             artScreenUiState = try {
-                ArtScreenUiState.Success(repository.getImageData(id).mapper())
-            } catch (e: HttpException) {
+                repository.fetchImageData(id)
+                ArtScreenUiState.Success(repository.getSavedImageById(id).uiModelMapper())
+            } catch (e: Exception) {
                 ArtScreenUiState.Error
             }
 

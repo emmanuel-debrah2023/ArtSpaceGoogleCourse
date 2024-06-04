@@ -11,11 +11,9 @@ import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.artspacegooglecourse.AppContainerInstance
 import com.example.artspacegooglecourse.data.Repository
-import com.example.artspacegooglecourse.network.mapper
+import com.example.artspacegooglecourse.data.db.uiModelMapper
 import com.example.artspacegooglecourse.ui.model.ImageData
 import kotlinx.coroutines.launch
-import retrofit2.HttpException
-import java.io.IOException
 
 sealed interface PhotoGridScreenUiState {
     data class Success(val photos: List<ImageData>) : PhotoGridScreenUiState
@@ -31,7 +29,7 @@ class PhotoGridScreenViewModel(private val repository: Repository) : ViewModel()
 
 
     /**
-     * Call getPhotoGridData() on init so we can display status immediately.
+     * Call getPhotoGridData() on init so we can display the gallery immediately.
      */
     init {
         getPhotoGridData()
@@ -41,10 +39,10 @@ class PhotoGridScreenViewModel(private val repository: Repository) : ViewModel()
         viewModelScope.launch {
             artworkUiState = PhotoGridScreenUiState.Loading
             artworkUiState = try {
-                PhotoGridScreenUiState.Success(repository.getImageDataList().map { it.mapper() })
-            } catch (e: IOException) {
-                PhotoGridScreenUiState.Error
-            } catch (e: HttpException) {
+                repository.fetchImageDataList()
+                PhotoGridScreenUiState.Success(
+                    repository.getSavedImagesDataList().map { it.uiModelMapper() })
+            } catch (e: Exception) {
                 PhotoGridScreenUiState.Error
             }
         }

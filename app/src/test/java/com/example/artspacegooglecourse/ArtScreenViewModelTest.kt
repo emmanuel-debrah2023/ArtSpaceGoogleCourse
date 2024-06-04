@@ -1,7 +1,7 @@
-package com.example.artspacegooglecourse.ui.test
+package com.example.artspacegooglecourse
 
 import com.example.artspacegooglecourse.data.Repository
-import com.example.artspacegooglecourse.network.NetworkImageData
+import com.example.artspacegooglecourse.data.db.ImageDataEntity
 import com.example.artspacegooglecourse.ui.ArtScreenUiState
 import com.example.artspacegooglecourse.ui.ArtScreenViewModel
 import com.example.artspacegooglecourse.ui.model.ImageData
@@ -35,17 +35,17 @@ class ArtScreenViewModelTest {
     fun `getArtScreenDetails successful response`() = runTest {
         val expectedState = ArtScreenUiState.Success(exampleObj)
 
-        coEvery { mockArtworkRepository.getImageData(any()) } returns NetworkImageData(
-            2,
-            "1",
-            "html.com",
-            true,
-            "Mona Lisa",
-            "1",
-            "lorem ipsum latin",
-            "lorem ipsum",
-            1999,
-            "Spain"
+        coEvery { mockArtworkRepository.getSavedImageById(any()) } returns ImageDataEntity(
+            apiId = 2,
+            imageId = "1",
+            apiLink = "html.com",
+            isBoosted = true,
+            title = "Mona Lisa",
+            apiModel = "1",
+            description = "lorem ipsum latin",
+            shortDescription = "lorem ipsum",
+            completionDate = 1999,
+            placeOfOrigin = "Spain"
         )
         viewModel.getCurrentArtworkDetails(2)
 
@@ -57,7 +57,7 @@ class ArtScreenViewModelTest {
     fun `getArtScreenDetails handling error response`() = runTest {
         val expectedState = ArtScreenUiState.Error
 
-        coEvery { mockArtworkRepository.getImageData(any()) } throws HttpException(
+        coEvery { mockArtworkRepository.getSavedImageById(any()) } throws HttpException(
             Response.error<Any>(404, "".toResponseBody(null))
         )
 
