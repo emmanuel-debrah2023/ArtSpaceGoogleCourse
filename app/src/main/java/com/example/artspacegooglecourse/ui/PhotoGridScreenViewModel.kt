@@ -17,8 +17,8 @@ import kotlinx.coroutines.launch
 
 sealed interface PhotoGridScreenUiState {
     data class Success(val photos: List<ImageData>) : PhotoGridScreenUiState
-    object Error : PhotoGridScreenUiState
-    object Loading : PhotoGridScreenUiState
+    data object Error : PhotoGridScreenUiState
+    data object Loading : PhotoGridScreenUiState
 }
 
 

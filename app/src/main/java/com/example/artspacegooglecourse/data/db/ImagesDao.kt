@@ -14,6 +14,6 @@ interface ImagesDao {
     suspend fun getImages(): List<ImageDataEntity>
 
     @Query("SELECT * FROM images WHERE apiId = :id")
-    suspend fun getImageById(id: Int): ImageDataEntity//Rename this getImageById
+    suspend fun getImageById(id: Int): ImageDataEntity
 
 }

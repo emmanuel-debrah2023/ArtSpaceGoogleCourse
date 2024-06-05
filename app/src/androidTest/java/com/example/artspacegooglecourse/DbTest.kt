@@ -34,7 +34,6 @@ class DaoTest {
 
     @Test
     fun getImageById() = runBlocking {
-        //Set Up
         val testImage = ImageDataEntity(
             apiId = 1,
             imageId = "1234-1234",
@@ -47,6 +46,7 @@ class DaoTest {
             placeOfOrigin = "",
             title = ""
         )
+
         userDao.upsert(testImage)
         val expectedImage = userDao.getImageById(1)
         Assert.assertEquals(testImage, expectedImage)
@@ -66,8 +66,7 @@ class DaoTest {
             placeOfOrigin = "",
             title = ""
         )
-        //Set Up
-        val testImageList = listOf<ImageDataEntity>(testImage)
+        val testImageList = listOf(testImage)
 
         userDao.upsert(testImage)
         val expectedImage = userDao.getImages()
@@ -90,7 +89,6 @@ class DaoTest {
         )
 
         userDao.upsert(testImage)
-
         Assert.assertEquals(userDao.getImageById(1), testImage)
     }
 

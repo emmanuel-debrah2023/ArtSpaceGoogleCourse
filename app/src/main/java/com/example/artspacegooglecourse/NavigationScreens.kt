@@ -1,8 +1,11 @@
 package com.example.artspacegooglecourse
 
-enum class Screen {
-    Gallery,
-    Art,
-}
+import kotlinx.serialization.Serializable
+
+@Serializable
+object Gallery
+
+@Serializable
+data class Art(val id: Int, val imageId: String)
 
 

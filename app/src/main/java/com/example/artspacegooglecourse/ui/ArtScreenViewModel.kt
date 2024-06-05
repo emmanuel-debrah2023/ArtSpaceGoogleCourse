@@ -17,13 +17,12 @@ import kotlinx.coroutines.launch
 sealed interface ArtScreenUiState {
 
     data class Success(val details: ImageData) : ArtScreenUiState
-    object Error : ArtScreenUiState
-    object Loading : ArtScreenUiState
+    data object Error : ArtScreenUiState
+    data object Loading : ArtScreenUiState
 }
 
 class ArtScreenViewModel(private val repository: Repository) : ViewModel() {
     var artScreenUiState: ArtScreenUiState by mutableStateOf(ArtScreenUiState.Loading)
-        //MaybeChange to request state ?
         private set
 
     private val _selectedArt = mutableStateOf("")

@@ -4,11 +4,10 @@ import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
-import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import androidx.navigation.navArgument
+import androidx.navigation.toRoute
 import com.example.artspacegooglecourse.ui.PhotoGridScreenViewModel
 import com.example.artspacegooglecourse.ui.screens.ArtScreen
 import com.example.artspacegooglecourse.ui.screens.ArtworkScreen
@@ -19,42 +18,31 @@ fun GalleryApp(
 ) {
     NavHost(
         navController = navController,
-        startDestination = Screen.Gallery.name
+        startDestination = Gallery
     ) {
 
-        composable(Screen.Gallery.name) {
+        composable<Gallery> {
             Log.d("VM", "GalleryApp: GalleryVM is called ")
             val photoGridScreenViewModel: PhotoGridScreenViewModel =
                 viewModel(factory = PhotoGridScreenViewModel.Factory)
             ArtworkScreen(
                 artworkUiState = photoGridScreenViewModel.artworkUiState,
                 retryAction = photoGridScreenViewModel::getPhotoGridData,
-                onArtSelect = { navController.navigate("${Screen.Art.name}/${it.id}/${it.imageId}") }
+                onArtSelect = {navController.navigate(Art(it.id, it.imageId)) }
             )
         }
 
-        composable(
-            route = "${Screen.Art.name}/{id}/{imageId}",
-            arguments = listOf(navArgument("id") {
-                type = NavType.IntType
-            }, navArgument("imageId") {
-                type = NavType.StringType
-            })
-        ) {
-
-                backStackEntry ->
-            val id = backStackEntry.arguments?.getInt("id")
-            val imageId = backStackEntry.arguments?.getString("imageId")
-
-            if (id != null && !imageId.isNullOrEmpty()) {
+        composable<Art>
+        {
+            backStackEntry ->
+            val art: Art = backStackEntry.toRoute()
                 ArtScreen(
-                    id = id,
-                    imageId = imageId,
-                    onNavigateToGallery = { navController.navigate(Screen.Gallery.name) },
-                    //artScreenUiState = artScreenViewModel.artScreenUiState
+                    id = art.id,
+                    imageId = art.imageId,
+                    onNavigateToGallery = { navController.navigate(Gallery) },
                 )
             }
+
         }
-    }
 }
 

@@ -19,12 +19,12 @@ interface AppContainer {
 class DefaultAppContainer(context: Context) : AppContainer {
     private val baseUrl = "https://api.artic.edu/api/v1/"
 
-    private val intercepter = HttpLoggingInterceptor().apply {
+    private val interceptor = HttpLoggingInterceptor().apply {
         this.level = HttpLoggingInterceptor.Level.BODY
     }
 
     private val client = OkHttpClient.Builder().apply {
-        this.addInterceptor(intercepter)
+        this.addInterceptor(interceptor)
             .connectTimeout(3, TimeUnit.SECONDS)
             .readTimeout(20, TimeUnit.SECONDS)
             .writeTimeout(25, TimeUnit.SECONDS)
