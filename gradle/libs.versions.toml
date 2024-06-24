@@ -24,6 +24,7 @@
 "room" = "2.6.1"
 "junitKtx" = "1.1.5"
 "media3TestUtils" = "1.3.1"
+uiTestJunit4Android = "1.6.7"
 
 
 
@@ -62,7 +63,7 @@ coroutines-test = {group = "org.jetbrains.kotlinx", name= "kotlinx-coroutines-te
 androidx-navigation-testing = { group = "androidx.navigation", name = "navigation-testing", version.ref = "composeNavigation"}
 androidx-test-ext = { group = "androidx.test.ext", name = "junit", version.ref = "androidxTestExt"}
 androidx-test-espresso = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "androidTestEspresso" }
-androidx-compose-ui-test = { group = "androidx.compose.ui", name = "ui-test-junit4"}
+androidx-compose-ui-test = { group = "androidx.compose.ui", name = "ui-test-junit4", version.ref = "androidxTestExt" }
 #Debug
 androidx-compose-ui-tooling = {group = "androidx.compose.ui", name = "ui-tooling"}
 androidx-compose-ui-test-manifest = {group = "androidx.compose.ui", name = "ui-test-manifest"}
@@ -76,3 +77,4 @@ logging-interceptor = {group = "com.squareup.okhttp3", name = "logging-intercept
 coil = {group = "io.coil-kt", name = "coil-compose", version.ref = "coil"}
 androidx-junit-ktx = { group = "androidx.test.ext", name = "junit-ktx", version.ref = "junitKtx" }
 androidx-media3-test-utils = { group = "androidx.media3", name = "media3-test-utils", version.ref = "media3TestUtils" }
+androidx-ui-test-junit4-android = { group = "androidx.compose.ui", name = "ui-test-junit4-android", version.ref = "uiTestJunit4Android" }
