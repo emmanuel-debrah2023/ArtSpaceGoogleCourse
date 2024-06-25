@@ -53,7 +53,7 @@ fun ArtScreen(
 
     }
     when (screenUiState) {
-        is ArtScreenUiState.Loading -> ArtworkApiLoadingScreen()
+        is  ArtScreenUiState.Loading -> ArtworkApiLoadingScreen()
         is ArtScreenUiState.Error -> ArtworkApiErrorScreen()
         is ArtScreenUiState.Success -> ArtworkApiScreen(
             onNavigateToGallery = { onNavigateToGallery() },
@@ -151,9 +151,7 @@ fun ArtworkApiLoadingScreen(
 }
 
 @Composable
-fun ArtworkApiErrorScreen(
-    modifier: Modifier = Modifier
-) {
+fun ArtworkApiErrorScreen() {
     Image(
         painter = painterResource(id = R.drawable.ic_connection_error),
         contentDescription = stringResource(R.string.loading_failed)

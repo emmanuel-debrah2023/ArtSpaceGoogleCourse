@@ -1,4 +1,4 @@
-package com.example.artspacegooglecourse.ui.test
+package com.example.artspacegooglecourse
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi

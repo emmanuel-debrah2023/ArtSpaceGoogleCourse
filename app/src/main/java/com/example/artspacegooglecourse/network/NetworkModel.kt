@@ -1,5 +1,6 @@
 package com.example.artspacegooglecourse.network
 
+import com.example.artspacegooglecourse.data.db.ImageDataEntity
 import com.example.artspacegooglecourse.ui.model.ImageData
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -7,8 +8,6 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class NetworkApiObject(
-   // @SerialName("pagination")
-    //val networkPagination: NetworkPagination? = null,
     @SerialName("data")
     val data: List<NetworkImageData>,
     @SerialName("info")
@@ -17,21 +16,7 @@ data class NetworkApiObject(
     val networkConfig: NetworkConfig
 )
 
-//@Serializable
-//data class NetworkPagination(
-//    @SerialName("total")
-//    val total: Int,
-//    @SerialName("limit")
-//    val limit: Int,
-//    @SerialName("offset")
-//    val offset: Int,
-//    @SerialName("total_pages")
-//    val totalPages: Int,
-//    @SerialName("current_page")
-//    val currentPage: Int,
-//    @SerialName("next_url")
-//    val nextUrl: String
-//)
+
 @Serializable
 data class NetworkImageData(
     @SerialName(value = "id")
@@ -55,7 +40,7 @@ data class NetworkImageData(
     @SerialName("place_of_origin")
     val placeOfOrigin: String = ""
 )
-fun NetworkImageData.mapper() = ImageData(
+fun NetworkImageData.uiModelMapper() = ImageData(
     id = id,
     imageId = imageId,
     title = title,
@@ -63,6 +48,19 @@ fun NetworkImageData.mapper() = ImageData(
     shortDescription = shortDescription,
     completionDate = completionDate,
     placeOfOrigin = placeOfOrigin
+)
+
+fun  NetworkImageData.entityMapper() = ImageDataEntity(
+    apiId = id,
+    imageId = imageId,
+    title = title,
+    description = description,
+    shortDescription = shortDescription,
+    completionDate = completionDate,
+    placeOfOrigin = placeOfOrigin,
+    apiModel = apiModel,
+    apiLink = apiLink,
+    isBoosted = isBoosted
 )
 
 

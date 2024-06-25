@@ -1,9 +1,9 @@
-package com.example.artspacegooglecourse.ui.test
+package com.example.artspacegooglecourse
 
+import com.example.artspacegooglecourse.data.Repository
+import com.example.artspacegooglecourse.data.db.ImageDataEntity
 import com.example.artspacegooglecourse.ui.PhotoGridScreenUiState
 import com.example.artspacegooglecourse.ui.PhotoGridScreenViewModel
-import com.example.artspacegooglecourse.data.Repository
-import com.example.artspacegooglecourse.network.NetworkImageData
 import com.example.artspacegooglecourse.ui.model.ImageData
 import io.mockk.coEvery
 import io.mockk.mockk
@@ -37,18 +37,18 @@ class PhotoGridScreenViewModelTest {
             )
         )
 
-        coEvery { mockRepository.getImageDataList() } returns mutableListOf(
-            NetworkImageData(
-                2,
-                "1",
-                "html.com",
-                true,
-                "Mona Lisa",
-                "1",
-                "lorem ipsum latin",
-                "lorem ipsum",
-                1999,
-                "Spain"
+        coEvery { mockRepository.getSavedImagesDataList() } returns mutableListOf(
+            ImageDataEntity(
+                apiId = 2,
+                imageId = "1",
+                apiLink = "html.com",
+                isBoosted = true,
+                title = "Mona Lisa",
+                apiModel = "1",
+                description = "lorem ipsum latin",
+                shortDescription = "lorem ipsum",
+                completionDate = 1999,
+                placeOfOrigin = "Spain"
             )
         )
 
@@ -60,7 +60,7 @@ class PhotoGridScreenViewModelTest {
     fun `PhotoGridScreenViewModel error on api call`() = runTest {
         val expectedState = PhotoGridScreenUiState.Error
 
-        coEvery { mockRepository.getImageDataList() } throws HttpException(
+        coEvery { mockRepository.getSavedImagesDataList() } throws HttpException(
             Response.error<Any>(
                 404, "".toResponseBody(null)
             )

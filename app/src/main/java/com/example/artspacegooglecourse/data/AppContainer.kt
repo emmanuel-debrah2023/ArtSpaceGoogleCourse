@@ -1,5 +1,7 @@
 package com.example.artspacegooglecourse.data
 
+import android.content.Context
+import com.example.artspacegooglecourse.data.db.AppDatabase
 import com.example.artspacegooglecourse.network.ArtworkApiService
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import okhttp3.MediaType.Companion.toMediaType
@@ -14,15 +16,15 @@ interface AppContainer {
     val repository: Repository
 }
 
-class DefaultAppContainer : AppContainer {
+class DefaultAppContainer(context: Context) : AppContainer {
     private val baseUrl = "https://api.artic.edu/api/v1/"
 
-    private val intercepter = HttpLoggingInterceptor().apply {
+    private val interceptor = HttpLoggingInterceptor().apply {
         this.level = HttpLoggingInterceptor.Level.BODY
     }
 
     private val client = OkHttpClient.Builder().apply {
-        this.addInterceptor(intercepter)
+        this.addInterceptor(interceptor)
             .connectTimeout(3, TimeUnit.SECONDS)
             .readTimeout(20, TimeUnit.SECONDS)
             .writeTimeout(25, TimeUnit.SECONDS)
@@ -43,7 +45,7 @@ class DefaultAppContainer : AppContainer {
 
 
     override val repository: Repository by lazy {
-        NetworkRepository(retrofitService)
+        NetworkRepository(retrofitService, AppDatabase.getInstance(context.applicationContext))
     }
 
 }
