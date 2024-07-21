@@ -12,7 +12,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.lazy.grid.itemsIndexed
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -25,6 +25,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -50,7 +51,7 @@ fun ArtworkScreen(
         is PhotoGridScreenUiState.Loading -> PhotosLoadingScreen(modifier = modifier.fillMaxSize())
         is PhotoGridScreenUiState.Success -> PhotosGridScreen(
             imageData = artworkUiState.photos,
-            onArtSelect = {onArtSelect(it)},
+            onArtSelect = { onArtSelect(it) },
             modifier = modifier
         )
 
@@ -72,16 +73,18 @@ fun PhotosGridScreen(
             columns = GridCells.Adaptive(150.dp),
             modifier = modifier.padding(horizontal = 16.dp),
             contentPadding = it
-            ) {
-            items(items = imageData, key = { photo -> photo.id }) { photo ->
+        ) {
+            itemsIndexed(
+                items = imageData,
+                key = { index, photo -> photo.id }
+            ) { index, photo ->
                 ArtPhotoCard(
                     photo = photo,
                     onClick = { image ->
                         onArtSelect(image)
                     },
-                    modifier = modifier
+                    modifier = Modifier.testTag("grid item $index")
                 )
-
             }
         }
     }
