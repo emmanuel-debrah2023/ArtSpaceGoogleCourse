@@ -2,6 +2,8 @@ package com.example.artspacegooglecourse
 
 import android.util.Log
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -25,8 +27,9 @@ fun GalleryApp(
             Log.d("VM", "GalleryApp: GalleryVM is called ")
             val photoGridScreenViewModel: PhotoGridScreenViewModel =
                 viewModel(factory = PhotoGridScreenViewModel.Factory)
+            val uiState by photoGridScreenViewModel.photoGridScreenUiState.collectAsState()
             ArtworkScreen(
-                artworkUiState = photoGridScreenViewModel.artworkUiState,
+                artworkUiState = uiState,
                 retryAction = photoGridScreenViewModel::getPhotoGridData,
                 onArtSelect = {navController.navigate(Art(it.id, it.imageId)) }
             )

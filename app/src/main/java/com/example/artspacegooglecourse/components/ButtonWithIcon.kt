@@ -18,7 +18,8 @@ fun ButtonWithIcon(
     icon: ImageVector,
     color: Color,
     @StringRes text: Int,
-    onClick: () -> Unit
+    onClick: () -> Unit,
+    modifier: Modifier
 ){
     TextButton(
         onClick = onClick,

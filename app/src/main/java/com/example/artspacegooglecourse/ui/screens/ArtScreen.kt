@@ -16,15 +16,18 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
@@ -44,21 +47,22 @@ fun ArtScreen(
     imageId: String
 ) {
     val artScreenViewModel: ArtScreenViewModel = viewModel(factory = ArtScreenViewModel.Factory)
-    val screenUiState = artScreenViewModel.artScreenUiState
+    val screenUiState by artScreenViewModel.artScreenUiState.collectAsStateWithLifecycle()
+
     if (id != null) {
         Log.d("VM", "GalleryApp: Calling VM :$id")
         LaunchedEffect(Unit) {
             artScreenViewModel.getCurrentArtworkDetails(id)
         }
-
     }
+
     when (screenUiState) {
         is  ArtScreenUiState.Loading -> ArtworkApiLoadingScreen()
         is ArtScreenUiState.Error -> ArtworkApiErrorScreen()
         is ArtScreenUiState.Success -> ArtworkApiScreen(
             onNavigateToGallery = { onNavigateToGallery() },
             imageId = imageId,
-            imageDetails = screenUiState.details
+            imageDetails = (screenUiState as ArtScreenUiState.Success<ImageData>).details
         )
     }
 }
@@ -75,7 +79,8 @@ fun ArtworkApiScreen(
         topBar = {
             NavTopBar(iconBtn = {
                 GalleryButton(
-                    onGalleryClick = { onNavigateToGallery() }
+                    onGalleryClick = { onNavigateToGallery() },
+                    modifier = modifier.testTag("gallery_button")
                 )
             })
         }

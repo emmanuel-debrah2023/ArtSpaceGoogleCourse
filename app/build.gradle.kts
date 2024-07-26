@@ -76,6 +76,7 @@ dependencies {
     implementation(libs.androidx.room.runtime)
     implementation(libs.androidx.junit.ktx)
     implementation(libs.androidx.media3.test.utils)
+    //implementation(libs.androidx.ui.test.junit4.android)
     ksp(libs.androidx.room.compiler)
     implementation(libs.androidx.room.ksp)
     testImplementation(libs.junit)
