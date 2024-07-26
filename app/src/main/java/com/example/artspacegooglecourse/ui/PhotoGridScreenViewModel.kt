@@ -1,8 +1,5 @@
 package com.example.artspacegooglecourse.ui
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
@@ -13,20 +10,20 @@ import com.example.artspacegooglecourse.AppContainerInstance
 import com.example.artspacegooglecourse.data.Repository
 import com.example.artspacegooglecourse.data.db.uiModelMapper
 import com.example.artspacegooglecourse.ui.model.ImageData
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
-sealed interface PhotoGridScreenUiState {
-    data class Success(val photos: List<ImageData>) : PhotoGridScreenUiState
-    data object Error : PhotoGridScreenUiState
-    data object Loading : PhotoGridScreenUiState
+sealed class PhotoGridScreenUiState<out T> {
+    data class Success<out T>(val photos: List<ImageData>) : PhotoGridScreenUiState<T>()
+    data class Error(val message: String) : PhotoGridScreenUiState<Nothing>()
+    data object Loading : PhotoGridScreenUiState<Nothing>()
 }
-
 
 class PhotoGridScreenViewModel(private val repository: Repository) : ViewModel() {
     /** The mutable State that stores the status of the most recent request */
-    var artworkUiState: PhotoGridScreenUiState by mutableStateOf(PhotoGridScreenUiState.Loading)
-        private set
-
+    val _photoGridUiState = MutableStateFlow<PhotoGridScreenUiState<List<ImageData>>>(PhotoGridScreenUiState.Loading)
+    val photoGridScreenUiState = _photoGridUiState.asStateFlow()
 
     /**
      * Call getPhotoGridData() on init so we can display the gallery immediately.
@@ -37,13 +34,12 @@ class PhotoGridScreenViewModel(private val repository: Repository) : ViewModel()
 
     fun getPhotoGridData() {
         viewModelScope.launch {
-            artworkUiState = PhotoGridScreenUiState.Loading
-            artworkUiState = try {
+            try {
                 repository.fetchImageDataList()
-                PhotoGridScreenUiState.Success(
-                    repository.getSavedImagesDataList().map { it.uiModelMapper() })
+                val data = repository.getSavedImagesDataList().map { it.uiModelMapper() }
+                _photoGridUiState.value = PhotoGridScreenUiState.Success(data)
             } catch (e: Exception) {
-                PhotoGridScreenUiState.Error
+                _photoGridUiState.value = PhotoGridScreenUiState.Error(e.toString())
             }
         }
     }

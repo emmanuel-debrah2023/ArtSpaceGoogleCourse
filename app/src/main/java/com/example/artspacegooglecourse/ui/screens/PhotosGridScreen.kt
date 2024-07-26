@@ -41,7 +41,7 @@ import com.example.artspacegooglecourse.utils.linkBuilder
 
 @Composable
 fun ArtworkScreen(
-    artworkUiState: PhotoGridScreenUiState,
+    artworkUiState: PhotoGridScreenUiState<List<ImageData>>,
     modifier: Modifier = Modifier,
     retryAction: () -> Unit,
     contentPadding: PaddingValues = PaddingValues(0.dp),
